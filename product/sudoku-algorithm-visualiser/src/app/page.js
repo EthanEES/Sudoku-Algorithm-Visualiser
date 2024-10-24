@@ -1,3 +1,5 @@
+import SudokuGrid from "../components/sudokugrid";
+
 export default function Page() {
     return (
         <div>
@@ -7,7 +9,7 @@ export default function Page() {
 
             
 
-            <header className="flex items-center w-full bg-white dark:bg-[#0F1217] justify-between py-5 px-5 ">
+            <header className="flex items-center w-full bg-white dark:bg-[#1b212c] justify-between py-5 px-5 rounded-b-2xl">
                 <a className="break-words">
                     <div className="flex items-center justify-between">
                         <div className="max-w-16 ">
@@ -18,6 +20,8 @@ export default function Page() {
                 </a>
                 <div className="flex items-center space-x-4 leading-5 sm:space-x-6">---------------------------------- Game Options Here ----------------------------------</div>
             </header>
+            <div className="w-[100vw] h-[100vw] fixed place-items-center pt-10"><SudokuGrid/></div>
+            
         </div>
     );
   }
