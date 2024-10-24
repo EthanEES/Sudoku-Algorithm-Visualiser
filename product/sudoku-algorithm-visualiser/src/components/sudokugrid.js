@@ -29,7 +29,7 @@ const Grid = () => {
             // Push the grid item
             gridItems.push(
                 <div className={className} key={`${index}`}>
-                    <input id="myText" type="number" className="bg-transparent h-12 w-12 place-items-center"/>
+                    <input id="myText" type="number" className="bg-transparent h-12 w-12 place-items-center "/>
                 </div>
             );
             index++;
