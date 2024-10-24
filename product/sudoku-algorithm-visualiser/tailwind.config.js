@@ -7,6 +7,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+
+      fontFamily: {
+        spacegrotesk: ['"Space Grotesk"', "sans-serif"],
+        
+      },
+
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
