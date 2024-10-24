@@ -9,6 +9,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
+        <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+        
+        <div className="flex-grow md:overflow-y-auto bg-white"> { children } </div>
+          </div>
         
       </body>
     </html>
