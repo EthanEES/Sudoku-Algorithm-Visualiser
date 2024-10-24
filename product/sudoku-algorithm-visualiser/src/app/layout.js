@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
       <body>
         <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
         
-        <div className="flex-grow md:overflow-y-auto bg-white"> { children } </div>
+        <div className="flex-grow md:overflow-y-auto "> { children } </div>
           </div>
         
       </body>
