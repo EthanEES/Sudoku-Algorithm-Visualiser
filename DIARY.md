@@ -6,6 +6,10 @@
 This is the diary linked to my final year project referenceing what i have done on a day to day basis in terms of what research i have done, the files i have updated or added, and any general additions or thoughts I may have about the project im working on.
 
   
+##  24/10/24: Day 4 - Sudoku Grid Creation and Error prevention
+
+Today I continued working on the website and managed to add some react and js to create a sudoku grid on the page. It resemples the actual sudoku game showing the actual 3x3 boxs within the overall 9x9. This is all created in a loop which generates a div per box and added to an array so i can refer to each box individually and make any overall changes or checks. The grid has also been made editable with **ONLY** numbers to prevent the user from placing letters in the base game.
+
 ##  23/10/24: Day 3 - Next.js and React Webpage
 
 On this day I refactored the template boilerplate from next.js and added a navbar base to the website. This will be used to hold all of the options for the game selecting between the different game modes and algorithm types. I also used photoshop to create a logo for my website aswell as a favicon to go with it. 
