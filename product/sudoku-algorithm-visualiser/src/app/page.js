@@ -16,7 +16,7 @@ export default function Page() {
     function generateGrid() {
         const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
         gridInputs.forEach(input => {
-            input.value = Math.floor(Math.random() * 10); // Clears the values of cell
+            input.value = Math.floor((Math.random() * 9) + 1); // Clears the values of cell
         });
     }
 
