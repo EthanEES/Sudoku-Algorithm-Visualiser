@@ -1,17 +1,14 @@
 // components/Grid.js
 import React from 'react';
 
-const Grid = () => {
-    const rows = 9;
-    const cols = 9;
-    
+const Grid = ({ rows = 9, cols = 9 }) => {
     const gridItems = [];
     let index = 0;
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            const isThickBorderRow = (i + 1) % 3 == 0; // Thick border after every 3rd row
-            const isThickBorderCol = (j + 1) % 3 == 0; // Thick border after every 3rd column
+            const isThickBorderRow = (i + 1) % (rows/3) == 0; // Thick border after every 3rd row
+            const isThickBorderCol = (j + 1) % (rows/3) == 0; // Thick border after every 3rd column
 
             // Determine className for the grid item
             let className = "grid-item border flex items-center justify-center border-gray-600 ";
@@ -29,7 +26,7 @@ const Grid = () => {
             // Push the grid item
             gridItems.push(
                 <div className={className} key={`${index}`}>
-                    <input id="boxcontent" type="number" min="1" max="9" required className=" text-xl bg-transparent h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
+                    <input id="boxcontent" type="number" min="1" max="9" required className=" text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
 
                 </div>
             );
@@ -38,9 +35,26 @@ const Grid = () => {
     }
 
     return (
-        <div className="grid grid-rows-9 grid-cols-9 dark:bg-[#1b212c] border-solid rounded border-4 h-[30%] w-[30%] mx-auto">
-            {gridItems}
+        <div>
+
+            <div className="grid dark:bg-[#1b212c] border-solid rounded border-4 mx-auto"
+            style={{
+                gridTemplateRows: `repeat(${rows}, 1fr)`,
+                gridTemplateColumns: `repeat(${cols}, 1fr)`,
+                maxWidth: '90vw', // Ensures grid doesn't overflow horizontally
+                maxHeight: '90vh', // Ensures grid doesn't overflow vertically
+                minWidth: '300px', // Minimum grid width
+                minHeight: '300px', // Minimum grid height
+                
+            }}
+    >
+            
+                {gridItems}
+            
+            </div>
         </div>
+
+
     );
 };
 
