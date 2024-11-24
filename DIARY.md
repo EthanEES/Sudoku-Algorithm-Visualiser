@@ -1,11 +1,19 @@
-
-  
-
 #  Final Year Project Diary 📚
 
 This is the diary linked to my final year project referenceing what i have done on a day to day basis in terms of what research i have done, the files i have updated or added, and any general additions or thoughts I may have about the project im working on.
 
-  
+##  21/11/24: Day 7 - Sudoku Grid Creation and Error prevention
+
+This day i spent my time adding proper functionallity to the buttons so that they actually work and control the grid elements. This research and practice with javascript will come in handy later when programming the algorithms. Additionally i refactored the original grid component so that it takes in 2 parameters when called upon so that the grid size can be changed, This linked to the size button which is programmed to alter this variable of the grid when needed. 
+
+##  20/11/24: Day 6 - Sudoku Grid Creation and Error prevention
+
+Today i spent time createing some baseplate buttons for the grid functionallity so that the user can change the size, generate a random grid and clear the grid.
+
+##  17/11/24: Day 5 - Sudoku Grid Creation and Error prevention
+
+Just made some bug fixes on the code adding the correct google fonts link to the font i wanted to use and applied it to the text across the page 
+
 ##  24/10/24: Day 4 - Sudoku Grid Creation and Error prevention
 
 Today I continued working on the website and managed to add some react and js to create a sudoku grid on the page. It resemples the actual sudoku game showing the actual 3x3 boxs within the overall 9x9. This is all created in a loop which generates a div per box and added to an array so i can refer to each box individually and make any overall changes or checks. The grid has also been made editable with **ONLY** numbers to prevent the user from placing letters in the base game.
