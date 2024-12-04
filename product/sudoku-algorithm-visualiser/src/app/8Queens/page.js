@@ -36,6 +36,7 @@ export default function Page() {
                 <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
                     <div className="flex pl-10">
                         <button onClick={clearGrid} className="border-2 rounded p-2 mr-2 hover:bg-[#313c50]">ClearGrid</button>
+                        <button onClick={() => window.location.href = '/'} className="border-2 rounded p-2 hover:bg-[#313c50]">Sudoku</button>
 
 
                     </div>
