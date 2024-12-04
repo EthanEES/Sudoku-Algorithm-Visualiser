@@ -40,6 +40,7 @@ export default function Page() {
     }
 
     function generateQueens() {
+        clearGrid()
         const gridInputs = document.querySelectorAll("#boxcontent");
         // Create an array (of arrays) to hold the values of the chessboard before they are read and added to the main grid
         const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
