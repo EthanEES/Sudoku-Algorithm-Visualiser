@@ -6,7 +6,31 @@ export default function Page() {
 
     const [gridSize] = useState(8);
 
-    
+    function isSafe(board, row, col) {
+        // Checks if there is a queen to the left of the current position in the same row 
+        for (let x = 0; x < col; x++) {
+            if (board[row][x] == 1) {
+                return false;
+            }
+        }
+
+        // Checks if there is a queen in the upper left diagonal of the current position in the same row 
+        for (let x = row, y = col; x >= 0 && y >= 0; x--, y--) {
+            if (board[x][y] == 1) {
+                return false;
+            }
+        }
+
+        // Checks if there is a queen in the lower left diagonal of the current position in the same row 
+        for (let x = row, y = col; x < gridSize && y >= 0; x++, y--) {
+            if (board[x][y] == 1) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     function clearGrid() {
         const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
         gridInputs.forEach((input) => {
@@ -15,9 +39,10 @@ export default function Page() {
         });
     }
 
-    function generateQueens(){
-        
+    function generateQueens() {
     }
+    
+    
 
 
 
