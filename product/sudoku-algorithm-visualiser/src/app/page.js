@@ -49,16 +49,18 @@ export default function Page() {
                     <div className="flex pl-10">
                         <button onClick={generateGrid} className="border-2 rounded p-2 mr-2 hover:bg-[#313c50]">GenerateGrid</button>
                         <button onClick={sizeGrid} className="border-2 rounded p-2 mr-2 hover:bg-[#313c50]">SizeGrid</button>
-                        <button onClick={clearGrid} className="border-2 rounded p-2 hover:bg-[#313c50]">ClearGrid</button>
+                        <button onClick={clearGrid} className="border-2 rounded p-2 mr-2 hover:bg-[#313c50]">ClearGrid</button>
+                        <button onClick={() => window.location.href = '/8Queens'} className="border-2 rounded p-2 hover:bg-[#313c50]">8Queens</button>
+
 
                     </div>
                     </div>
             </header>
             <div id="GridDiv" className=" scale-125 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">
-                <div className="font-5xl mb-2">Timer: 00:00</div>
-                <SudokuGrid rows={gridSize} cols={gridSize}/>
+            <div className="font-5xl mb-2">Sudoku</div>
+                <SudokuGrid rows={gridSize} cols={gridSize}/> 
+                {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
                 {gridSize} x {gridSize}
-
 
             </div>
             
