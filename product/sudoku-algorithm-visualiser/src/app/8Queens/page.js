@@ -40,6 +40,44 @@ export default function Page() {
     }
 
     function generateQueens() {
+        const gridInputs = document.querySelectorAll("#boxcontent");
+        // Create an array (of arrays) to hold the values of the chessboard before they are read and added to the main grid
+        const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
+    
+        
+        function placeQueens(col) {
+            if (col >= gridSize) return true; // All queens placed successfully
+    
+            let startRow = col == 1 
+    
+            for (let i = 0; i < gridSize; i++) {
+                let row = (startRow + i) % gridSize;
+                const cell = Array.from(gridInputs).find(
+                    input =>
+                        parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+                );
+    
+                if (isSafe(board, row, col)) {
+                    board[row][col] = 1;
+                    cell.className = " text-xl dark:bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    cell.value = 1;
+    
+                    if (placeQueens(col + 1)) {
+                        return true; 
+                    }
+    
+                    // Backtrack if placing the queen doesn't work
+                    board[row][col] = 0;
+                    cell.className = " text-xl dark:bg-[#1b212c] border border-2 border-dashed border-red-800 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    cell.value = ""; 
+    
+                }
+            }
+    
+            return false; // No valid queen placement found
+        }
+    
+        placeQueens(0);
     }
     
     
