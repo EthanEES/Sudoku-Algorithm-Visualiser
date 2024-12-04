@@ -48,10 +48,10 @@ export default function Page() {
         function placeQueens(col) {
             if (col >= gridSize) return true; // All queens placed successfully
     
-            let startRow = col == 1 
+            let startRow = Math.floor(Math.random() * gridSize); // Random starting row for the first column
     
             for (let i = 0; i < gridSize; i++) {
-                let row = (startRow + i) % gridSize;
+                let row = (startRow + i) % gridSize; 
                 const cell = Array.from(gridInputs).find(
                     input =>
                         parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
