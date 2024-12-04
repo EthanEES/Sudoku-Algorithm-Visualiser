@@ -39,14 +39,19 @@ export default function Page() {
         });
     }
 
-    function generateQueens() {
+    function sleep(time) {
+        
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    async function generateQueens() {
         clearGrid()
         const gridInputs = document.querySelectorAll("#boxcontent");
         // Create an array (of arrays) to hold the values of the chessboard before they are read and added to the main grid
         const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
     
         
-        function placeQueens(col) {
+        async function placeQueens(col) {
             if (col >= gridSize) return true; // All queens placed successfully
     
             let startRow = Math.floor(Math.random() * gridSize); // Random starting row for the first column
@@ -63,7 +68,8 @@ export default function Page() {
                     cell.className = " text-xl dark:bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     cell.value = 1;
     
-                    if (placeQueens(col + 1)) {
+                    await sleep(100); // Delay of 100ms
+                    if (await placeQueens(col + 1)) {
                         return true; 
                     }
     
@@ -72,6 +78,7 @@ export default function Page() {
                     cell.className = " text-xl dark:bg-[#1b212c] border border-2 border-dashed border-red-800 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     cell.value = ""; 
     
+                    await sleep(100); // Delay of 100ms
                 }
             }
     
