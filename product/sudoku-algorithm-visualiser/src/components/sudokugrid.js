@@ -26,7 +26,7 @@ const Grid = ({ rows = 9, cols = 9 }) => {
             // Push the grid item
             gridItems.push(
                 <div className={className} key={`${index}`}>
-                    <input id="boxcontent" type="number" min="1" max="9" required className=" text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
+                    <input id="boxcontent" type="number" min="1" max="9" data-index={index} data-row={i} data-col={j} required className=" text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"/>
 
                 </div>
             );
