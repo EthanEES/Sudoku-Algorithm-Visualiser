@@ -119,10 +119,6 @@ export default function Page() {
                 break;
 
             case 4:
-                setsubgridSize(5)
-                setGridSize(25)
-                break;
-            case 5:
                 setsubgridSize(3)
                 setGridSize(9)
                 break;
