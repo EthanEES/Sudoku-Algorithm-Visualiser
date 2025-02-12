@@ -5,7 +5,7 @@ import SudokuGrid from "../components/sudokugrid";
 export default function Page() {
 
     const [gridSize, setGridSize] = useState(9);
-    const [subgridSize, setsubgridSize] = useState(Math.floor(gridSize / 3))
+    const [subgridSize, setsubgridSize] = useState(3)
 
     function sleep(time) {
         
@@ -111,9 +111,23 @@ export default function Page() {
 
     function sizeGrid() {
         clearGrid()
-        // If the grid size is 15, reset to 9
-        setGridSize((prevSize) => (prevSize === 15 ? 9 : prevSize + 3));
-        setsubgridSize(Math.floor(sizeGrid / 3))
+
+        switch(subgridSize){
+            case 3:
+                setsubgridSize(4)
+                setGridSize(16)
+                break;
+
+            case 4:
+                setsubgridSize(5)
+                setGridSize(25)
+                break;
+            case 5:
+                setsubgridSize(3)
+                setGridSize(9)
+                break;
+
+        }        
     }
 
 
