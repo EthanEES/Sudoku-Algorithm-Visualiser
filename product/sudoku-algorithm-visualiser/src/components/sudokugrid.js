@@ -3,23 +3,25 @@ import React from 'react';
 
 const Grid = ({ rows = 9, cols = 9 }) => {
     const gridItems = [];
+    const gridSize = rows
+    const subgridSize = Math.sqrt(rows)
     let index = 0;
 
     for (let i = 0; i < rows; i++) {
         for (let j = 0; j < cols; j++) {
-            const isThickBorderRow = (i + 1) % (rows/3) == 0; // Thick border after every 3rd row
-            const isThickBorderCol = (j + 1) % (rows/3) == 0; // Thick border after every 3rd column
+            const isThickBorderRow = (i + 1) % (subgridSize) == 0; // Thick border 
+            const isThickBorderCol = (j + 1) % (subgridSize) == 0; // Thick border 
 
             // Determine className for the grid item
             let className = "grid-item border flex items-center justify-center border-gray-600 ";
 
             // Add bottom border if it's a thick border row
-            if (isThickBorderRow && i != 8) {
+            if (isThickBorderRow && i != (gridSize - 1)) {
                 className += "border-b-4 border-b-white "; // Bottom border for 3rd and 6th row
             }
 
             // Add right border if it's a thick border column
-            if (isThickBorderCol && j != 8) {
+            if (isThickBorderCol && j != (gridSize - 1)) {
                 className += "border-r-4 border-r-white "; // Right border for 3rd and 6th column
             }
 
