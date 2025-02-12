@@ -6,19 +6,108 @@ export default function Page() {
 
     const [gridSize, setGridSize] = useState(9);
 
+   
+    
     function clearGrid() {
         const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
         gridInputs.forEach(input => {
             input.value = ""; // Clears the values of cell
+            input.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
         });
     }
 
     function generateGrid() {
-        const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
-        gridInputs.forEach(input => {
-            input.value = Math.floor((Math.random() * 9) + 1); // Clears the values of cell
-        });
+        clearGrid(); // Assuming this function resets the grid
+        const gridInputs = document.querySelectorAll("#boxcontent");
+    
+        const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
+    
+        const maxAttempts = 1000; // Prevent infinite loops
+    
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                let temp_value = Math.floor(Math.random() * gridSize) + 1;
+                let attempts = 0;
+                
+
+                while (checkforDupes(board, row, col, temp_value)){
+                    temp_value = Math.floor(Math.random() * gridSize) + 1;
+                    attempts++;
+    
+                    if (attempts > maxAttempts) {
+                        return generateGrid(); // Restart the process
+                    }
+                }
+
+                
+    
+                board[row][col] = temp_value;
+            }
+        }
+    
+        for(let i = 0; i < 60; i++){
+            let randx = Math.floor(Math.random() * gridSize)
+            let randy = Math.floor(Math.random() * gridSize)
+            const cell = Array.from(gridInputs).find(
+                input =>
+                    parseInt(input.getAttribute("data-row")) == randx && parseInt(input.getAttribute("data-col")) == randy
+                
+            );
+
+
+
+        }
+
+        for (let i = 0; i < gridSize; i++) {
+            let row = (i) % gridSize;
+            for (let i = 0; i < gridSize; i++) {
+                let col = (i) % gridSize;
+                
+
+                    const cell = Array.from(gridInputs).find(
+                        input =>
+                            parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+                    );
+
+                    cell.value = board[row][col]
+
+                    
+
+            }
+        }
+
+        console.log(board); // Display the filled board
+
     }
+    
+    function checkforDupes(board, row, col, value) {
+        const gridSize = board.length;
+    
+        for (let i = 0; i < gridSize; i++) {
+            if (board[row][i] === value) {
+                return true;
+            }
+        }
+    
+        for (let i = 0; i < gridSize; i++) {
+            if (board[i][col] === value) {
+                return true;
+            }
+        }
+        
+        const startRow = row - (row % 3),
+          startCol = col - (col % 3);
+
+        for (let i = 0; i < 3; i++)
+            for (let j = 0; j < 3; j++)
+                if (board[i + startRow][j + startCol] === value)
+                    return true;
+    
+        return false; // No duplicates found
+    }
+    
+    
+
 
     function sizeGrid() {
         clearGrid()
