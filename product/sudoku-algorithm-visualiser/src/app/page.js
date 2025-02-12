@@ -6,7 +6,10 @@ export default function Page() {
 
     const [gridSize, setGridSize] = useState(9);
 
-   
+    function sleep(time) {
+        
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
     
     function clearGrid() {
         const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
@@ -16,7 +19,7 @@ export default function Page() {
         });
     }
 
-    function generateGrid() {
+    async function generateGrid() {
         clearGrid(); // Assuming this function resets the grid
         const gridInputs = document.querySelectorAll("#boxcontent");
     
@@ -80,6 +83,7 @@ export default function Page() {
                     }
                     
 
+                    await sleep(100); // Delay of 100ms
             }
         }
 
