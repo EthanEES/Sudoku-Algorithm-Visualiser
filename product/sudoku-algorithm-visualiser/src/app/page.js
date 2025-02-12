@@ -5,6 +5,7 @@ import SudokuGrid from "../components/sudokugrid";
 export default function Page() {
 
     const [gridSize, setGridSize] = useState(9);
+    const [subgridSize, setsubgridSize] = useState(Math.floor(gridSize / 3))
 
     function sleep(time) {
         
@@ -36,30 +37,20 @@ export default function Page() {
                 while (checkforDupes(board, row, col, temp_value)){
                     temp_value = Math.floor(Math.random() * gridSize) + 1;
                     attempts++;
-    
+                    
                     if (attempts > maxAttempts) {
                         return generateGrid(); // Restart the process
                     }
+
+    
                 }
 
                 
-    
+
                 board[row][col] = temp_value;
             }
         }
     
-        for(let i = 0; i < 60; i++){
-            let randx = Math.floor(Math.random() * gridSize)
-            let randy = Math.floor(Math.random() * gridSize)
-            const cell = Array.from(gridInputs).find(
-                input =>
-                    parseInt(input.getAttribute("data-row")) == randx && parseInt(input.getAttribute("data-col")) == randy
-                
-            );
-
-
-
-        }
 
         for (let i = 0; i < gridSize; i++) {
             let row = (i) % gridSize;
@@ -73,7 +64,6 @@ export default function Page() {
                     );
 
                     let prob = Math.floor(Math.random() * 100)
-                    console.log(prob)
                     if (prob < 40){
                         cell.value = board[row][col]
                     }
@@ -92,7 +82,6 @@ export default function Page() {
     }
     
     function checkforDupes(board, row, col, value) {
-        const gridSize = board.length;
     
         for (let i = 0; i < gridSize; i++) {
             if (board[row][i] === value) {
@@ -106,8 +95,8 @@ export default function Page() {
             }
         }
         
-        const startRow = row - (row % 3),
-          startCol = col - (col % 3);
+        const startRow = row - (row % (subgridSize)),
+          startCol = col - (col % (subgridSize));
 
         for (let i = 0; i < 3; i++)
             for (let j = 0; j < 3; j++)
@@ -124,6 +113,7 @@ export default function Page() {
         clearGrid()
         // If the grid size is 15, reset to 9
         setGridSize((prevSize) => (prevSize === 15 ? 9 : prevSize + 3));
+        setsubgridSize(Math.floor(sizeGrid / 3))
     }
 
 
