@@ -6,6 +6,7 @@ export default function Page() {
 
     const [gridSize, setGridSize] = useState(9);
     const [subgridSize, setsubgridSize] = useState(3)
+    let unknownvalues = [];
 
     function sleep(time) {
         
@@ -18,6 +19,9 @@ export default function Page() {
             input.value = ""; // Clears the values of cell
             input.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
         });
+
+        unknownvalues = []
+
     }
 
     async function generateGrid() {
@@ -70,11 +74,31 @@ export default function Page() {
                     else{
                         cell.value = 0
                         cell.className = "blur text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        unknownvalues.push([row, col])
                     }
                     
 
-                    await sleep(100); // Delay of 100ms
+                    await sleep(1); // Delay of 100ms
             }
+        }
+
+        for (let i = 0; i < unknownvalues.length; i++) {
+            let row = unknownvalues[i][0];
+            let col = unknownvalues[i][1];
+
+            console.log(row)
+
+
+            const cell = Array.from(gridInputs).find(
+                input =>
+                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+            );
+            
+            cell.value = 
+            cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+
+
+    
         }
 
         console.log(board); // Display the filled board
@@ -98,8 +122,8 @@ export default function Page() {
         const startRow = row - (row % (subgridSize)),
           startCol = col - (col % (subgridSize));
 
-        for (let i = 0; i < 3; i++)
-            for (let j = 0; j < 3; j++)
+        for (let i = 0; i < subgridSize; i++)
+            for (let j = 0; j < subgridSize; j++)
                 if (board[i + startRow][j + startCol] === value)
                     return true;
     
