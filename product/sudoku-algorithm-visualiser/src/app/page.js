@@ -113,6 +113,7 @@ export default function Page() {
             
             cell.value = ""
             cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            cell.readOnly = false;
         }
     }
     
