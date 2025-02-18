@@ -250,6 +250,7 @@ export default function Page() {
                 {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
                 {gridSize} x {gridSize}
 
+                <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
 
             </div>
             
