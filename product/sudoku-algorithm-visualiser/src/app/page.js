@@ -6,7 +6,12 @@ export default function Page() {
 
     const [gridSize, setGridSize] = useState(9);
     const [subgridSize, setsubgridSize] = useState(3)
-    let unknownvalues = [];
+    
+    const [gridSolution, setgridSolution] = useState([])
+    const [gridProblem, setgridProblem] = useState([])
+    const [gridAttempt, setgridAttempt] = useState([])
+
+    const [unknownValues, setunknownValues] = useState([])
 
     function sleep(time) {
         
@@ -20,14 +25,12 @@ export default function Page() {
             input.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
         });
 
-        unknownvalues = []
-
     }
 
     async function generateGrid() {
         clearGrid(); // Assuming this function resets the grid
         const gridInputs = document.querySelectorAll("#boxcontent");
-    
+
         const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
     
         const maxAttempts = 1000; // Prevent infinite loops
@@ -54,12 +57,16 @@ export default function Page() {
                 board[row][col] = temp_value;
             }
         }
-    
+
+        let grid = JSON.parse(JSON.stringify(board));
+        let unknowns = [];
+        
+
 
         for (let i = 0; i < gridSize; i++) {
             let row = (i) % gridSize;
-            for (let i = 0; i < gridSize; i++) {
-                let col = (i) % gridSize;
+            for (let j = 0; j < gridSize; j++) {
+                let col = (j) % gridSize;
                 
 
                     const cell = Array.from(gridInputs).find(
@@ -72,22 +79,33 @@ export default function Page() {
                         cell.value = board[row][col]
                     }
                     else{
+                        grid[row][col] = 0
                         cell.value = 0
                         cell.className = "blur text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        unknownvalues.push([row, col])
+                        unknowns.push([row, col])
                     }
                     
 
-                    await sleep(1); // Delay of 100ms
+                    await sleep(50); // Delay of 100ms
             }
         }
 
+        console.log(gridSolution)
+        console.log(gridProblem)
+        console.log(unknownValues)
+
+        setunknownValues(unknowns)
+        setgridSolution(board)
+        setgridProblem(grid)
+        
+
+        removeGridValues(unknowns, gridInputs)
+    }
+
+    function removeGridValues(unknownvalues, gridInputs){
         for (let i = 0; i < unknownvalues.length; i++) {
             let row = unknownvalues[i][0];
             let col = unknownvalues[i][1];
-
-            console.log(row)
-
 
             const cell = Array.from(gridInputs).find(
                 input =>
@@ -96,13 +114,7 @@ export default function Page() {
             
             cell.value = 
             cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-
-
-    
         }
-
-        console.log(board); // Display the filled board
-
     }
     
     function checkforDupes(board, row, col, value) {
@@ -151,6 +163,59 @@ export default function Page() {
     }
 
 
+    function backtrack(){
+
+    }
+
+    function checkGrid(board){
+        const gridInputs = document.querySelectorAll("#boxcontent");
+        const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
+
+        for (let i = 0; i < gridSize; i++) {
+            let row = (i) % gridSize;
+            for (let j = 0; j < gridSize; j++) {
+                let col = (j) % gridSize;
+                
+
+                    const cell = Array.from(gridInputs).find(
+                        input =>
+                            parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+                    );
+
+                    attempt[row][col] = parseInt(cell.value)
+
+                    
+                    
+            }
+        }
+
+        console.log(unknownValues)
+        console.log(gridSolution)
+        console.log(gridProblem)
+
+        for (let i = 0; i < unknownValues.length; i++) {
+            let row = unknownValues[i][0];
+            let col = unknownValues[i][1];
+
+            const cell = Array.from(gridInputs).find(
+                input =>
+                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+            );
+
+            if (attempt[row][col] != board[row][col] && Number.isInteger(attempt[row][col])){
+
+                cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            }
+
+            else(
+                cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+  
+            )
+
+        }
+
+    }
+
 
     return (
         <div className="flex font-spacegrotesk">
@@ -176,7 +241,6 @@ export default function Page() {
                         <button onClick={clearGrid} className="border-2 rounded p-2 mr-2 hover:bg-[#313c50]">ClearGrid</button>
                         <button onClick={() => window.location.href = '/8Queens'} className="border-2 rounded p-2 hover:bg-[#313c50]">8Queens</button>
 
-
                     </div>
                     </div>
             </header>
@@ -185,6 +249,7 @@ export default function Page() {
                 <SudokuGrid rows={gridSize} cols={gridSize}/> 
                 {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
                 {gridSize} x {gridSize}
+
 
             </div>
             
