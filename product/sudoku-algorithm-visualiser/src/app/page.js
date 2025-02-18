@@ -11,6 +11,8 @@ export default function Page() {
     const [gridProblem, setgridProblem] = useState([])
     const [gridAttempt, setgridAttempt] = useState([])
 
+    const [lives, setlives] = useState(3)
+
     const [unknownValues, setunknownValues] = useState([])
 
     function sleep(time) {
@@ -29,6 +31,7 @@ export default function Page() {
 
     async function generateGrid() {
         clearGrid(); // Assuming this function resets the grid
+        setlives(3);
         const gridInputs = document.querySelectorAll("#boxcontent");
 
         const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
@@ -90,10 +93,6 @@ export default function Page() {
             }
         }
 
-        console.log(gridSolution)
-        console.log(gridProblem)
-        console.log(unknownValues)
-
         setunknownValues(unknowns)
         setgridSolution(board)
         setgridProblem(grid)
@@ -112,7 +111,7 @@ export default function Page() {
                     parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
             );
             
-            cell.value = 
+            cell.value = ""
             cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
         }
     }
@@ -167,7 +166,7 @@ export default function Page() {
 
     }
 
-    function checkGrid(board){
+    async function checkGrid(board){
         const gridInputs = document.querySelectorAll("#boxcontent");
         const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
 
@@ -202,15 +201,53 @@ export default function Page() {
                     parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
             );
 
-            if (attempt[row][col] != board[row][col] && Number.isInteger(attempt[row][col])){
+            if (lives > 0){
+                if (attempt[row][col] != board[row][col] && Number.isInteger(attempt[row][col])){
 
-                cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    setlives(prevlives => prevlives - 1);
+                }
+    
+                else{
+                    cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      
+                }
+
             }
 
-            else(
-                cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-  
-            )
+            else{
+                for (let i = 0; i < gridSize; i++) {
+                    let row = (i) % gridSize;
+                    for (let j = 0; j < gridSize; j++) {
+                        let col = (j) % gridSize;
+                        
+        
+                            const cell = Array.from(gridInputs).find(
+                                input =>
+                                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+                            );
+                            
+
+                            let prob = Math.floor(Math.random() * 100)
+                            if (prob < 50){
+                                cell.value = 0
+                            }
+                            else{
+                                cell.value = 1
+                            }
+                            
+                            cell.className = "text-xl bg-red-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                            
+        
+                            await sleep(50); // Delay of 100ms
+                    }
+
+                }
+                clearGrid()
+                break
+            }
+
+            
 
         }
 
