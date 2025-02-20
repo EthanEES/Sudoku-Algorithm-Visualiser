@@ -80,6 +80,8 @@ export default function Page() {
                     let prob = Math.floor(Math.random() * 100)
                     if (prob < 40){
                         cell.value = board[row][col]
+                        cell.readOnly = true;
+
                     }
                     else{
                         grid[row][col] = 0
@@ -114,6 +116,7 @@ export default function Page() {
             cell.value = ""
             cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             cell.readOnly = false;
+
         }
     }
     
@@ -282,7 +285,7 @@ export default function Page() {
                     </div>
                     </div>
             </header>
-            <div id="GridDiv" className=" scale-125 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">
+            <div id="GridDiv" className=" scale-115 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">
             <div className="font-5xl mb-2">Sudoku</div>
                 <SudokuGrid rows={gridSize} cols={gridSize}/> 
                 {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
