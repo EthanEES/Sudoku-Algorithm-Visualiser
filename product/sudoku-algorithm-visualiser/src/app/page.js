@@ -145,9 +145,6 @@ export default function Page() {
         return false; // No duplicates found
     }
     
-    
-
-
     function sizeGrid() {
         clearGrid()
 
@@ -205,7 +202,7 @@ export default function Page() {
                     parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
             );
 
-            if (lives > 0){
+            if (lives > 1){
                 if (attempt[row][col] != board[row][col] && Number.isInteger(attempt[row][col])){
 
                     cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
@@ -251,8 +248,6 @@ export default function Page() {
                 break
             }
 
-            
-
         }
 
     }
@@ -292,6 +287,7 @@ export default function Page() {
                 {gridSize} x {gridSize}
 
                 <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
+                <button className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</button>
 
             </div>
             
