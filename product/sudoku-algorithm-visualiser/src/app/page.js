@@ -21,6 +21,7 @@ export default function Page() {
     }
     
     function clearGrid() {
+        setlives(3);
         const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
         gridInputs.forEach(input => {
             input.value = ""; // Clears the values of cell
@@ -31,7 +32,6 @@ export default function Page() {
 
     async function generateGrid() {
         clearGrid(); // Assuming this function resets the grid
-        setlives(3);
         const gridInputs = document.querySelectorAll("#boxcontent");
 
         const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
