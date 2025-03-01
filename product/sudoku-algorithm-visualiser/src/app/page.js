@@ -14,6 +14,8 @@ export default function Page() {
     const [lives, setlives] = useState(3)
 
     const [unknownValues, setunknownValues] = useState([])
+    const [numofunknownValues, setnumofunknownValues] = useState(0)
+
 
     function sleep(time) {
         
@@ -51,11 +53,7 @@ export default function Page() {
                     if (attempts > maxAttempts) {
                         return generateGrid(); // Restart the process
                     }
-
-    
                 }
-
-                
 
                 board[row][col] = temp_value;
             }
@@ -64,8 +62,6 @@ export default function Page() {
         let grid = JSON.parse(JSON.stringify(board));
         let unknowns = [];
         
-
-
         for (let i = 0; i < gridSize; i++) {
             let row = (i) % gridSize;
             for (let j = 0; j < gridSize; j++) {
@@ -94,11 +90,11 @@ export default function Page() {
                     await sleep(50); // Delay of 100ms
             }
         }
+        setnumofunknownValues(unknowns.length)
 
         setunknownValues(unknowns)
         setgridSolution(board)
         setgridProblem(grid)
-        
 
         removeGridValues(unknowns, gridInputs)
     }
@@ -164,12 +160,14 @@ export default function Page() {
 
 
     function backtrack(){
+        
 
     }
 
     async function checkGrid(board){
         const gridInputs = document.querySelectorAll("#boxcontent");
         const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
+        let correct = 0;
 
         for (let i = 0; i < gridSize; i++) {
             let row = (i) % gridSize;
@@ -189,9 +187,7 @@ export default function Page() {
             }
         }
 
-        console.log(unknownValues)
-        console.log(gridSolution)
-        console.log(gridProblem)
+    
 
         for (let i = 0; i < unknownValues.length; i++) {
             let row = unknownValues[i][0];
@@ -208,13 +204,22 @@ export default function Page() {
                     cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     setlives(prevlives => prevlives - 1);
                 }
+
+                else if(attempt[row][col] == board[row][col] && Number.isInteger(attempt[row][col])){
+                    cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    correct += 1;
+
+                }
     
                 else{
                     cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+
       
                 }
 
             }
+
+
 
             else{
                 for (let i = 0; i < gridSize; i++) {
@@ -248,7 +253,51 @@ export default function Page() {
                 break
             }
 
+            
+
+
         }
+
+        if (correct >= numofunknownValues){
+            for (let i = 0; i < gridSize; i++) {
+                let row = (i) % gridSize;
+                for (let j = 0; j < gridSize; j++) {
+                    let col = (j) % gridSize;
+                    
+    
+                        const cell = Array.from(gridInputs).find(
+                            input =>
+                                parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+                        );
+                        
+
+                        let prob = Math.floor(Math.random() * 100)
+                        if (prob < 50){
+                            cell.value = 0
+                        }
+                        else{
+                            cell.value = 1
+                        }
+                        
+                        cell.className = "text-xl bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        
+    
+                        await sleep(50); // Delay of 100ms
+                }
+
+            }
+            clearGrid()
+            
+
+        }
+
+
+
+
+        console.log(numofunknownValues);
+        console.log(gridSolution);
+        console.log(gridProblem);
+        console.log(correct);
 
     }
 
