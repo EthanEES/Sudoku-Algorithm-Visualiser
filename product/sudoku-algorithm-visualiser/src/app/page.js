@@ -159,10 +159,50 @@ export default function Page() {
     }
 
 
-    function backtrack(){
+  
+    function isCorrect(board){
+        const gridInputs = document.querySelectorAll("#boxcontent");
+        const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
+
+        for (let i = 0; i < gridSize; i++) {
+            let row = (i) % gridSize;
+            for (let j = 0; j < gridSize; j++) {
+                let col = (j) % gridSize;
+                
+
+                    const cell = Array.from(gridInputs).find(
+                        input =>
+                            parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+                    );
+
+                    attempt[row][col] = parseInt(cell.value)
+            }
+        }
+
+        for (let i = 0; i < unknownValues.length; i++) {
+            let row = unknownValues[i][0];
+            let col = unknownValues[i][1];
+
+            const cell = Array.from(gridInputs).find(
+                input =>
+                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+            );
+
+            if (attempt[row][col] != board[row][col] && Number.isInteger(attempt[row][col])){
+
+                cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                return false
+            }
+
+        }
+
         
+        console.log(board)
+        console.log(attempt)
+
 
     }
+
 
     async function checkGrid(board){
         const gridInputs = document.querySelectorAll("#boxcontent");
@@ -206,7 +246,7 @@ export default function Page() {
                 }
 
                 else if(attempt[row][col] == board[row][col] && Number.isInteger(attempt[row][col])){
-                    cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    cell.className = "text-xl bg-green-900 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     correct += 1;
 
                 }
@@ -222,6 +262,7 @@ export default function Page() {
 
 
             else{
+                //End Screen
                 for (let i = 0; i < gridSize; i++) {
                     let row = (i) % gridSize;
                     for (let j = 0; j < gridSize; j++) {
@@ -294,10 +335,7 @@ export default function Page() {
 
 
 
-        console.log(numofunknownValues);
-        console.log(gridSolution);
-        console.log(gridProblem);
-        console.log(correct);
+        
 
     }
 
@@ -336,7 +374,7 @@ export default function Page() {
                 {gridSize} x {gridSize}
 
                 <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
-                <button className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</button>
+                <button onClick={() => isCorrect(gridSolution)} className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</button>
 
             </div>
             
