@@ -17,12 +17,12 @@ export default function Page() {
     const [numofunknownValues, setnumofunknownValues] = useState(0)
 
 
-    function sleep(time) {
+    function sleep(time) { // Function to delay the program
         
         return new Promise(resolve => setTimeout(resolve, time));
     }
     
-    function clearGrid() {
+    function clearGrid() { // Function to clear the grid displayed on the webpage
         setlives(3);
         const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
         gridInputs.forEach(input => {
@@ -32,7 +32,7 @@ export default function Page() {
 
     }
 
-    async function generateGrid() {
+    async function generateGrid() { // Function to generate the sudoku grid and display on the page
         clearGrid(); // Assuming this function resets the grid
         const gridInputs = document.querySelectorAll("#boxcontent");
 
@@ -99,7 +99,7 @@ export default function Page() {
         removeGridValues(unknowns, gridInputs)
     }
 
-    function removeGridValues(unknownvalues, gridInputs){
+    function removeGridValues(unknownvalues, gridInputs) { // Removes some of the sudoku values from the solved puzzle
         for (let i = 0; i < unknownvalues.length; i++) {
             let row = unknownvalues[i][0];
             let col = unknownvalues[i][1];
@@ -116,7 +116,7 @@ export default function Page() {
         }
     }
     
-    function checkforDupes(board, row, col, value) {
+    function checkforDupes(board, row, col, value) { // Various sudoku conditions that are checked returning true if duplicates are found
     
         for (let i = 0; i < gridSize; i++) {
             if (board[row][i] === value) {
@@ -141,7 +141,7 @@ export default function Page() {
         return false; // No duplicates found
     }
     
-    function sizeGrid() {
+    function sizeGrid() { // Change the gridsize altering the global variables
         clearGrid()
 
         switch(subgridSize){
@@ -158,7 +158,7 @@ export default function Page() {
         }        
     }
 
-    function getgridAttempt(){
+    function getgridAttempt(){ // Traverses and saves the displayed grid with both the user inputs + generated grid
         const gridInputs = document.querySelectorAll("#boxcontent");
         const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
 
@@ -180,7 +180,7 @@ export default function Page() {
     }
 
 
-    async function solveSudoku() {
+    async function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
         getgridAttempt();
         
         async function solve(index) {
@@ -217,7 +217,7 @@ export default function Page() {
         }
     }
     
-    async function placeValue(num, row, col) {
+    async function placeValue(num, row, col) { // Places the passed values into the displayed grid
         const gridInputs = document.querySelectorAll("#boxcontent");
     
         const cell = Array.from(gridInputs).find(
@@ -242,10 +242,7 @@ export default function Page() {
         cell.style.backgroundColor = "";
     }
     
-
-    
-
-    async function checkGrid(board){
+    async function checkGrid(board){ // Checks if the attempt matches the solution and displays if its wrong
         const gridInputs = document.querySelectorAll("#boxcontent");
         const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
         let correct = 0;
