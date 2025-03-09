@@ -362,12 +362,12 @@ export default function Page() {
 
             
 
-            <nav className="flex items-center w-full bg-white dark:bg-[#1b212c] justify-between py-5 px-5 rounded-b-2xl ">
+            <nav className="flex items-center w-full bg-white dark:bg-[#1b212c] justify-between py-3 px-5 rounded-b-2xl ">
                 <a className="break-words">
                     <div className="flex items-center justify-between">
-                        <div className="max-w-16 ">
+                        <button onClick={() => window.location.href = "/"} className="max-w-16 rounded py-2 mr-2 hover:bg-[#313c50]">
                             <img className="" src="/Su.png" alt="image description"></img>
-                        </div>
+                        </button>
                         <div className="h-6 text-xl font-semibold sm:block ">Sudoku Algorithm Visualiser</div>
                     </div>
                 </a>
