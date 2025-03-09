@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clearGrid}) {
+export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clearGrid, longFunction}) {
     const [isAlgorithmsOpen, setIsAlgorithmsOpen] = useState(false);
     const [isOtherOpen, setIsOtherOpen] = useState(false);
     const [isSpeedOpen, setIsSpeedOpen] = useState(false);
@@ -16,6 +16,7 @@ export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clear
                         <div className="h-6 text-xl font-semibold sm:block ">Sudoku Algorithm Visualiser</div>
                     </div>
                 </a>
+                
                 <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
                     <div className="flex pl-10">
                         <div id="AlgosDropdown" className="relative rounded p-2 mr-2 hover:bg-[#313c50]">
@@ -33,9 +34,9 @@ export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clear
                             )}
 
                         </div>
-                        <button onClick={generateGrid} className=" rounded p-2 mr-2 hover:bg-[#313c50]">GenerateGrid</button>
+                        <button onClick={() => longFunction(generateGrid)} className=" rounded p-2 mr-2 hover:bg-[#313c50]">GenerateGrid</button>
                         <button onClick={sizeGrid} className=" rounded p-2 mr-2 hover:bg-[#313c50]">SizeGrid</button>
-                        <button onClick={() => solveSudoku()} className=" rounded p-2 mr-2 bg-[#BDD4E7] text-[#1b212c]">Visualise!</button>
+                        <button onClick={() => longFunction(solveSudoku)} className=" rounded p-2 mr-2 bg-[#BDD4E7] text-[#1b212c]">Visualise!</button>
                         <div id="SpeedDropdown" className="relative rounded p-2 mr-2 hover:bg-[#313c50]">
                             <button onClick={() => setIsSpeedOpen(!isSpeedOpen)} className="">
                                 Speed: Fast ▼

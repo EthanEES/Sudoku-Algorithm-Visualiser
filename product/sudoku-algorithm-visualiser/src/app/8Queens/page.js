@@ -7,6 +7,20 @@ import QueensNavbar from "../../components/queensNavbar";
 export default function Page() {
 
     const [gridSize] = useState(8);
+    const [isFunctionRunning, setIsFunctionRunning] = useState(false);
+
+
+    function sleep(time) {
+        
+        return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    async function longFunction(func) {
+        setIsFunctionRunning(true); // Show overlay
+        await func(); // Wait for function fo finish
+        setIsFunctionRunning(false); // Hide overlay
+    }
+
 
     function isSafe(board, row, col) {
         // Checks if there is a queen to the left of the current position in the same row 
@@ -40,11 +54,7 @@ export default function Page() {
             input.value = ""; // Clears the values of cells
         });
     }
-
-    function sleep(time) {
-        
-        return new Promise(resolve => setTimeout(resolve, time));
-    }
+    
 
     async function generateQueens() {
         clearGrid()
@@ -93,7 +103,7 @@ export default function Page() {
             return false; // No valid queen placement found
         }
     
-        placeQueens(0);
+        longFunction(() => placeQueens(0))
     }
     
     
@@ -106,7 +116,9 @@ export default function Page() {
             <link rel="preconnect" href="https://fonts.gstatic.com" ></link>
             <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
 
-            
+            {isFunctionRunning && (
+                <div className="absolute w-full h-full opacity-0 z-50 pointer-events-auto" />
+            )}
 
             <QueensNavbar generateQueens={generateQueens} clearGrid={clearGrid}/>
             <div id="GridDiv" className=" scale-125 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">

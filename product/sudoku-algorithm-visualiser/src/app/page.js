@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import SudokuGrid from "../components/sudokugrid";
-import Navbar from "../components/navbar";
+import AlgosNavbar from "../components/algosNavbar";
 
 
 export default function Page() {
+
+    const [isFunctionRunning, setIsFunctionRunning] = useState(false);
 
     const [gridSize, setGridSize] = useState(9);
     const [subgridSize, setsubgridSize] = useState(3)
@@ -22,6 +24,12 @@ export default function Page() {
     function sleep(time) { // Function to delay the program
         
         return new Promise(resolve => setTimeout(resolve, time));
+    }
+
+    async function longFunction(func) {
+        setIsFunctionRunning(true); // Show overlay
+        await func(); // Wait for function fo finish
+        setIsFunctionRunning(false); // Hide overlay
     }
     
     function clearGrid() { // Function to clear the grid displayed on the webpage
@@ -357,8 +365,14 @@ export default function Page() {
             <link rel="preconnect" href="https://fonts.gstatic.com" ></link>
             <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
 
+            {isFunctionRunning && (
+                <div className="absolute w-full h-full opacity-0 z-50 pointer-events-auto" />
+            )}
+
+
+            <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction}/>
+
             
-            <Navbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid}/>
 
             <div id="GridDiv" className=" scale-115 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">
             <div className="font-5xl mb-2">Sudoku</div>
