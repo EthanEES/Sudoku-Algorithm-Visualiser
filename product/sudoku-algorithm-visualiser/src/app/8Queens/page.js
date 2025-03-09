@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import SudokuGrid from "../../components/sudokugrid";
+import QueensNavbar from "../../components/queensNavbar";
+
 
 export default function Page() {
 
@@ -100,25 +102,7 @@ export default function Page() {
 
             
 
-            <header className="flex items-center w-full bg-white dark:bg-[#1b212c] justify-between py-5 px-5 rounded-b-2xl ">
-                <a className="break-words">
-                    <div className="flex items-center justify-between">
-                        <div className="max-w-16 ">
-                            <img className="" src="/Su.png" alt="image description"></img>
-                        </div>
-                        <div className="h-6 text-xl font-semibold sm:block ">Sudoku Algorithm Visualiser</div>
-                    </div>
-                </a>
-                <div className="flex items-center space-x-4 leading-5 sm:space-x-6">
-                    <div className="flex pl-10">
-                        <button onClick={generateQueens} className="border-2 rounded p-2 mr-2 hover:bg-[#313c50]">GenerateQueens</button>
-                        <button onClick={clearGrid} className="border-2 rounded p-2 mr-2 hover:bg-[#313c50]">ClearGrid</button>
-                        <button onClick={() => window.location.href = '/'} className="border-2 rounded p-2 hover:bg-[#313c50]">Sudoku</button>
-
-
-                    </div>
-                </div>
-            </header>
+            <QueensNavbar generateQueens={generateQueens} clearGrid={clearGrid}/>
             <div id="GridDiv" className=" scale-125 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">
                 <div className="font-5xl mb-2">8 Queens Problem</div>
                 <SudokuGrid rows={gridSize} cols={gridSize}/>
