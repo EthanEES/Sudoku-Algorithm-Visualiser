@@ -67,20 +67,26 @@ export default function Page() {
     
                 if (isSafe(board, row, col)) {
                     board[row][col] = 1;
-                    cell.className = " text-xl dark:bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     cell.value = 1;
+                    cell.style.color = "#1b212c";
+                    cell.style.transition = "background-color 0.3s ease";
+                    cell.style.backgroundColor = "#ccffcc";
     
                     await sleep(100); // Delay of 100ms
                     if (await placeQueens(col + 1)) {
+                        cell.style.backgroundColor = "";
+                        cell.style.color = "";
+
                         return true; 
                     }
     
                     // Backtrack if placing the queen doesn't work
                     board[row][col] = 0;
-                    cell.className = " text-xl dark:bg-[#1b212c] border border-2 border-dashed border-red-800 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    cell.value = ""; 
+                    cell.value = "";
+                    cell.style.backgroundColor = "#ffcccc"; 
     
                     await sleep(100); // Delay of 100ms
+                    cell.style.backgroundColor = "";
                 }
             }
     
