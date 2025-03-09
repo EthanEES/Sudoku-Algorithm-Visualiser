@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-export default function Navbar({ generateGrid, sizeGrid, solveSudoku, clearGrid}) {
+export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clearGrid}) {
     const [isAlgorithmsOpen, setIsAlgorithmsOpen] = useState(false);
     const [isOtherOpen, setIsOtherOpen] = useState(false);
     const [isSpeedOpen, setIsSpeedOpen] = useState(false);
