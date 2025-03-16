@@ -1,10 +1,11 @@
 "use client";
 import React, { useState } from "react";
 
-export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clearGrid, longFunction}) {
+export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clearGrid, longFunction, changeSpeed}) {
     const [isAlgorithmsOpen, setIsAlgorithmsOpen] = useState(false);
     const [isOtherOpen, setIsOtherOpen] = useState(false);
     const [isSpeedOpen, setIsSpeedOpen] = useState(false);
+    const [speedType, setSpeedType] = useState("Fast");
 
     return (
         <nav className="flex items-center w-full fixed bg-white dark:bg-[#1b212c] justify-between py-3 px-5 rounded-b-2xl ">
@@ -39,13 +40,13 @@ export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clear
                         <button onClick={() => longFunction(solveSudoku)} className=" rounded p-2 mr-2 bg-[#BDD4E7] text-[#1b212c]">Visualise!</button>
                         <div id="SpeedDropdown" className="relative rounded p-2 mr-2 hover:bg-[#313c50]">
                             <button onClick={() => setIsSpeedOpen(!isSpeedOpen)} className="">
-                                Speed: Fast ▼
+                                Speed: {speedType} ▼
                             </button>
                             {isSpeedOpen && (
                                 <ul className="absolute mt-2 dark:bg-gray-800 border rounded">
-                                    {["Slow", "Medium", "Fast", "Fastest"].map((speed, index) => (
-                                        <button key={index} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-                                            <a>{speed}</a>
+                                    {[["Slow", 50], ["Medium", 40], ["Fast", 25], ["Fastest", 0]].map(([label, speed], index) => (
+                                        <button key={index} onClick={() => {changeSpeed(speed); setSpeedType(label)}} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
+                                            <a>{label}</a>
                                         </button>
                                     ))}
                                 </ul>
