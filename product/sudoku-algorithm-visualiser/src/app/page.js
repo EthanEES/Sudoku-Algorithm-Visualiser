@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import SudokuGrid from "../components/sudokugrid";
-import AlgosNavbar from "../components/algosNavbar";
+import HomeNavbar from "../components/homeNavbar";
 
 
 export default function Page() {
@@ -370,12 +370,12 @@ export default function Page() {
             )}
 
 
-            <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction}/>
+            <HomeNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} clearGrid={clearGrid} checkGrid={checkGrid} gridSolution={gridSolution} longFunction={longFunction}/>
 
             
 
-            <div className="grid grid-cols-3 w-screen h-screen items-center">
-                <div className="pl-16 pb-60 text-center">
+            <div className="grid grid-cols-3 w-screen h-screen items-center pb-20">
+                <div className="pl-16 text-center">
                 </div>
 
                 <div id="GridDiv" className="flex flex-col justify-center items-center">
@@ -385,13 +385,11 @@ export default function Page() {
                     <SudokuGrid rows={gridSize} cols={gridSize}/> 
                     {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
                     {gridSize} x {gridSize}
-
-                    <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
                     <a className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</a>
 
                 </div>
 
-                <div className="pr-16 pb-20">
+                <div className="pr-16">
                 </div>
             </div>
 
