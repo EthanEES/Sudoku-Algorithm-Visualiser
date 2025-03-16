@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import SudokuGrid from "../components/sudokugrid";
-import AlgosNavbar from "../components/algosNavbar";
+import SudokuGrid from "../../components/sudokugrid";
+import AlgosNavbar from "../../components/algosNavbar";
 
 
 export default function Page() {
@@ -17,6 +17,8 @@ export default function Page() {
 
     const [lives, setlives] = useState(3)
 
+    let solveSpeed = 0;
+
     const [unknownValues, setunknownValues] = useState([])
     const [numofunknownValues, setnumofunknownValues] = useState(0)
 
@@ -24,6 +26,10 @@ export default function Page() {
     function sleep(time) { // Function to delay the program
         
         return new Promise(resolve => setTimeout(resolve, time));
+    }
+    
+    function changeSpeed(speed){
+        solveSpeed = speed;
     }
 
     async function longFunction(func) {
@@ -206,7 +212,7 @@ export default function Page() {
                     gridAttempt[row][col] = num;
 
                     await placeValue(num, row, col);
-                    await sleep(10);
+                    await sleep(solveSpeed);
     
                     if (await solve(index + 1)) {
                         return true;
@@ -214,7 +220,7 @@ export default function Page() {
                     gridAttempt[row][col] = 0; // 
                     
                     await placeValue(0, row, col);
-                    await sleep(10);
+                    await sleep(solveSpeed);
                 }
             }
             return false;
@@ -248,7 +254,7 @@ export default function Page() {
             cell.style.backgroundColor = "#ccffcc"; // Light green for placing a number
         }
 
-        await sleep(20);
+        await sleep(solveSpeed);
         cell.style.backgroundColor = "";
     }
     
@@ -369,21 +375,35 @@ export default function Page() {
                 <div className="absolute w-full h-full opacity-0 z-50 pointer-events-auto" />
             )}
 
+            
+            <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
+            <div className="grid grid-cols-3 w-screen h-screen items-center text-center">
+                <div>
+                    <h>Algorithm Name</h>
+                    <p>Algorithm Description</p>
+                </div>
 
-            <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction}/>
+                <div id="GridDiv" className="flex flex-col justify-center items-center">
+                    <div className="font-5xl mb-2">
+                        Sudoku
+                    </div>
+                    <SudokuGrid rows={gridSize} cols={gridSize}/> 
+                    {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
+                    {gridSize} x {gridSize}
+
+                    <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
+                    <a className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</a>
+
+                </div>
+
+                <div>
+                    Complexity Graphs
+                </div>
+            </div>
 
             
 
-            <div id="GridDiv" className=" scale-115 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">
-            <div className="font-5xl mb-2">Sudoku</div>
-                <SudokuGrid rows={gridSize} cols={gridSize}/> 
-                {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
-                {gridSize} x {gridSize}
-
-                <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
-                <a className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</a>
-
-            </div>
+            
             
         </div>
     );
