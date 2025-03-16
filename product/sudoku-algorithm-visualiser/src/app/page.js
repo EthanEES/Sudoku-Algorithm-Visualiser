@@ -189,68 +189,6 @@ export default function Page() {
         gridAttempt = attempt
     }
 
-
-    async function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
-        getgridAttempt();
-        
-        async function solve(index) {
-            if (index >= unknownValues.length) {
-                return true;
-            }
-    
-            let [row, col] = unknownValues[index];
-    
-            for (let num = 1; num <= gridSize; num++) {
-                console.log(gridAttempt, row, col, num);
-                if (!checkforDupes(gridAttempt, row, col, num)) {
-                    gridAttempt[row][col] = num;
-
-                    await placeValue(num, row, col);
-                    await sleep(10);
-    
-                    if (await solve(index + 1)) {
-                        return true;
-                    }
-                    gridAttempt[row][col] = 0; // 
-                    
-                    await placeValue(0, row, col);
-                    await sleep(10);
-                }
-            }
-            return false;
-        }
-    
-        if (await solve(0)) {
-            console.log("Sudoku solved");
-        } else {
-            console.log("No solution exists.");
-        }
-    }
-    
-    async function placeValue(num, row, col) { // Places the passed values into the displayed grid
-        const gridInputs = document.querySelectorAll("#boxcontent");
-    
-        const cell = Array.from(gridInputs).find(
-            input =>
-                parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-        );
-        
-        if(num == 0){
-            cell.value = ""
-        }
-        else{
-            cell.value = num;
-        }
-
-        if (num === 0) {
-            cell.style.backgroundColor = "#ffcccc"; // Light red for backtracking
-        } else {
-            cell.style.backgroundColor = "#ccffcc"; // Light green for placing a number
-        }
-
-        await sleep(20);
-        cell.style.backgroundColor = "";
-    }
     
     async function checkGrid(board){ // Checks if the attempt matches the solution and displays if its wrong
         const gridInputs = document.querySelectorAll("#boxcontent");
