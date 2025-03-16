@@ -377,14 +377,20 @@ export default function Page() {
 
             
             <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
-            <div className="grid grid-cols-3 w-screen h-screen items-center text-center">
-                <div>
-                    <h>Algorithm Name</h>
-                    <p>Algorithm Description</p>
+            <div className="grid grid-cols-3 w-screen h-screen items-center">
+                <div className="pl-16 pb-60 text-center">
+                    <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Forward Checking (BT)</p></h1>
+                    <p className="p-2.5 w-full h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        Praesent sed venenatis metus, ac feugiat quam. Integer 
+                        sit amet lorem in lorem cursus aliquet vel tincidunt nisi. 
+                        Vestibulum ultrices nisl vel lectus finibus rutrum. Ut ligula 
+                        tortor, gravida nec nisi sit amet, aliquam malesuada est. 
+                        Integer tempus nec leo eu euismod. Sed ac porttitor justo. 
+                        </p>
                 </div>
 
                 <div id="GridDiv" className="flex flex-col justify-center items-center">
-                    <div className="font-5xl mb-2">
+                    <div className="text-xl font-bold mb-2 underline underline-offset-3 decoration-[#8693AB]">
                         Sudoku
                     </div>
                     <SudokuGrid rows={gridSize} cols={gridSize}/> 
@@ -396,8 +402,10 @@ export default function Page() {
 
                 </div>
 
-                <div>
-                    Complexity Graphs
+                <div className="pr-16 pb-20">
+                    <h1 className="mb-4 text-center text-3xl font-bold text-white">Complexity: <p className="underline inline underline-offset-3 decoration-[#8693AB]">Time</p></h1>
+                    <p className="p-2.5 w-full h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
+                    
                 </div>
             </div>
 
