@@ -17,6 +17,8 @@ export default function Page() {
 
     const [lives, setlives] = useState(3)
 
+    let solveSpeed = 0;
+
     const [unknownValues, setunknownValues] = useState([])
     const [numofunknownValues, setnumofunknownValues] = useState(0)
 
@@ -24,6 +26,10 @@ export default function Page() {
     function sleep(time) { // Function to delay the program
         
         return new Promise(resolve => setTimeout(resolve, time));
+    }
+    
+    function changeSpeed(speed){
+        solveSpeed = speed;
     }
 
     async function longFunction(func) {
@@ -206,7 +212,7 @@ export default function Page() {
                     gridAttempt[row][col] = num;
 
                     await placeValue(num, row, col);
-                    await sleep(10);
+                    await sleep(solveSpeed);
     
                     if (await solve(index + 1)) {
                         return true;
@@ -214,7 +220,7 @@ export default function Page() {
                     gridAttempt[row][col] = 0; // 
                     
                     await placeValue(0, row, col);
-                    await sleep(10);
+                    await sleep(solveSpeed);
                 }
             }
             return false;
@@ -248,7 +254,7 @@ export default function Page() {
             cell.style.backgroundColor = "#ccffcc"; // Light green for placing a number
         }
 
-        await sleep(20);
+        await sleep(solveSpeed);
         cell.style.backgroundColor = "";
     }
     
@@ -370,7 +376,7 @@ export default function Page() {
             )}
 
             
-            <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction}/>
+            <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
             <div className="grid grid-cols-3 w-screen h-screen items-center text-center">
                 <div>
                     <h>Algorithm Name</h>
