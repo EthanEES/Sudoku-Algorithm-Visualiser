@@ -374,17 +374,32 @@ export default function Page() {
 
             
 
-            <div id="GridDiv" className=" scale-115 flex flex-col fixed justify-center items-center w-[30%] h-full ml-[35vw] mt-10 ">
-            <div className="font-5xl mb-2">Sudoku</div>
-                <SudokuGrid rows={gridSize} cols={gridSize}/> 
-                {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
-                {gridSize} x {gridSize}
+            <div className="grid grid-cols-3 w-screen h-screen items-center">
+                <div className="pl-16 pb-60 text-center">
+                </div>
 
-                <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
-                <a className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</a>
+                <div id="GridDiv" className="flex flex-col justify-center items-center">
+                    <div className="text-xl font-bold mb-2 underline underline-offset-3 decoration-[#8693AB]">
+                        Sudoku
+                    </div>
+                    <SudokuGrid rows={gridSize} cols={gridSize}/> 
+                    {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
+                    {gridSize} x {gridSize}
 
+                    <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
+                    <a className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</a>
+
+                </div>
+
+                <div className="pr-16 pb-20">
+                </div>
             </div>
+
+            
+
+            
             
         </div>
+            
     );
   }
