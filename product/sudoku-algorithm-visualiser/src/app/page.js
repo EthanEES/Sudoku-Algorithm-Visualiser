@@ -206,7 +206,7 @@ export default function Page() {
                     gridAttempt[row][col] = num;
 
                     await placeValue(num, row, col);
-                    await sleep(20);
+                    await sleep(10);
     
                     if (await solve(index + 1)) {
                         return true;
@@ -214,7 +214,7 @@ export default function Page() {
                     gridAttempt[row][col] = 0; // 
                     
                     await placeValue(0, row, col);
-                    await sleep(20);
+                    await sleep(10);
                 }
             }
             return false;
