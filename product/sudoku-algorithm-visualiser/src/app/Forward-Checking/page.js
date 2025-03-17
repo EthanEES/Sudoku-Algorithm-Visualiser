@@ -22,6 +22,9 @@ export default function Page() {
     const [unknownValues, setunknownValues] = useState([])
     const [numofunknownValues, setnumofunknownValues] = useState(0)
 
+    const [unknownPossibilities, setunknownPossibilities] = useState([])
+
+
 
     function sleep(time) { // Function to delay the program
         
@@ -195,42 +198,50 @@ export default function Page() {
         gridAttempt = attempt
     }
 
-
-    async function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
-        getgridAttempt();
-        
-        async function solve(index) {
-            if (index >= unknownValues.length) { // Check if the recursion has passed the last unknown value.
-                return true;
+    function assignDomain(value, index, array) {
+        unknownPossibilities[index] = [value, [1, 2, 3, 4, 5, 6, 7, 8, 9]]; // Assign numbers 1-9
+    }
+    
+    function constraintProp(value, index, array) {
+        let [cell, possibilities] = unknownPossibilities[index];
+        let [row, col] = cell;
+    
+        for (let i = 0; i < gridSize; i++) {
+            let gridValue = gridAttempt[row][i];
+            if (possibilities.includes(gridValue)) {
+                possibilities.splice(possibilities.indexOf(gridValue), 1);
             }
+        }
     
-            let [row, col] = unknownValues[index];
+        for (let i = 0; i < gridSize; i++) {
+            let gridValue = gridAttempt[i][col];
+            if (possibilities.includes(gridValue)) {
+                possibilities.splice(possibilities.indexOf(gridValue), 1);
+            }
+        }
     
-            for (let num = 1; num <= gridSize; num++) {
-                console.log(gridAttempt, row, col, num);
-                if (!checkforDupes(gridAttempt, row, col, num)) {
-                    gridAttempt[row][col] = num;
-
-                    await placeValue(num, row, col);
-                    await sleep(solveSpeed);
+        let startRow = row - (row % (subgridSize));
+        let startCol = col - (col % (subgridSize));
     
-                    if (await solve(index + 1)) {
-                        return true;
-                    }
-                    gridAttempt[row][col] = 0; // 
-                    
-                    await placeValue(0, row, col);
-                    await sleep(solveSpeed);
+        for (let i = 0; i < subgridSize; i++) {
+            for (let j = 0; j < subgridSize; j++) {
+                let gridValue = gridAttempt[startRow + i][startCol + j];
+                if (possibilities.includes(gridValue)) {
+                    possibilities.splice(possibilities.indexOf(gridValue), 1);
                 }
             }
-            return false;
         }
+    }
     
-        if (await solve(0)) {
-            console.log("Sudoku solved");
-        } else {
-            console.log("No solution exists.");
-        }
+    async function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
+        getgridAttempt(); 
+        setunknownPossibilities([])
+        
+        unknownValues.forEach(assignDomain);
+        unknownPossibilities.forEach(constraintProp);
+
+
+        console.log(unknownPossibilities); // Log the assigned possibilities
     }
     
     async function placeValue(num, row, col) { // Places the passed values into the displayed grid
@@ -377,7 +388,7 @@ export default function Page() {
 
             
             <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
-            <div className="grid grid-cols-2 w-screen max-w-[1920px]  justify-center items-center h-screen py-28">
+            <div className="grid grid-cols-2 w-screen max-w-[1920px] justify-center items-center h-screen py-28">
                 <div className="pl-16">
                     <div className="pb-10 place-items-start">
                         <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Forward Checking (BT)</p></h1>
