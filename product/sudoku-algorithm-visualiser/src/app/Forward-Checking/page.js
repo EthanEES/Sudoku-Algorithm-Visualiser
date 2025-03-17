@@ -366,7 +366,7 @@ export default function Page() {
 
 
     return (
-        <div className="flex font-spacegrotesk">
+        <div className="flex font-spacegrotesk justify-center">
             <link rel="preconnect" href="https://fonts.googleapis.com"></link>
             <link rel="preconnect" href="https://fonts.gstatic.com" ></link>
             <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
@@ -377,36 +377,40 @@ export default function Page() {
 
             
             <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
-            <div className="grid grid-cols-3 w-screen h-screen items-center">
-                <div className="pl-16 pb-60 text-center">
-                    <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Forward Checking (BT)</p></h1>
-                    <p className="p-2.5 w-full h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Praesent sed venenatis metus, ac feugiat quam. Integer 
-                        sit amet lorem in lorem cursus aliquet vel tincidunt nisi. 
-                        Vestibulum ultrices nisl vel lectus finibus rutrum. Ut ligula 
-                        tortor, gravida nec nisi sit amet, aliquam malesuada est. 
-                        Integer tempus nec leo eu euismod. Sed ac porttitor justo. 
+            <div className="grid grid-cols-2 w-screen max-w-[1920px]  justify-center items-center h-screen py-28">
+                <div className="pl-16">
+                    <div className="pb-10 place-items-start">
+                        <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Forward Checking (BT)</p></h1>
+                        <p className="p-2.5 w-2/3 h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Praesent sed venenatis metus, ac feugiat quam. Integer 
+                            sit amet lorem in lorem cursus aliquet vel tincidunt nisi. 
+                            Vestibulum ultrices nisl vel lectus finibus rutrum. Ut ligula 
+                            tortor, gravida nec nisi sit amet, aliquam malesuada est. 
+                            Integer tempus nec leo eu euismod. Sed ac porttitor justo. 
                         </p>
+                    </div>
+                    
+
+                    <div className="place-items-start">
+                        <h1 className="mb-4 text-3xl font-bold text-white">Complexity: <p className="underline inline underline-offset-3 decoration-[#8693AB]">Time</p></h1>
+                        <p className="p-2.5 w-2/3 h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
+                    
+                    </div>
                 </div>
 
-                <div id="GridDiv" className="flex flex-col justify-center items-center">
+                <div id="GridDiv" className="flex flex-col justify-center items-center mr-52 scale-[120%]">
                     <div className="text-xl font-bold mb-2 underline underline-offset-3 decoration-[#8693AB]">
                         Sudoku
                     </div>
                     <SudokuGrid rows={gridSize} cols={gridSize}/> 
                     {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
                     {gridSize} x {gridSize}
+                    <button onClick={() => checkGrid(gridSolution)} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">CheckGrid</button>
 
-                    <button onClick={() => checkGrid(gridSolution)} className="border-2 rounded p-2 mt-5 mr-2 hover:bg-[#313c50]">CheckGrid</button>
-                    <a className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</a>
 
                 </div>
 
-                <div className="pr-16 pb-20">
-                    <h1 className="mb-4 text-center text-3xl font-bold text-white">Complexity: <p className="underline inline underline-offset-3 decoration-[#8693AB]">Time</p></h1>
-                    <p className="p-2.5 w-full h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
-                    
-                </div>
+                
             </div>
 
             
