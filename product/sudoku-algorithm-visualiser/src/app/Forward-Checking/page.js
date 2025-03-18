@@ -17,7 +17,7 @@ export default function Page() {
 
     const [lives, setlives] = useState(3)
 
-    let solveSpeed = 0;
+    const [solveSpeed, setSolveSpeed] = useState(0);
 
     const [unknownValues, setunknownValues] = useState([])
     const [numofunknownValues, setnumofunknownValues] = useState(0)
@@ -31,8 +31,8 @@ export default function Page() {
         return new Promise(resolve => setTimeout(resolve, time));
     }
     
-    function changeSpeed(speed){
-        solveSpeed = speed;
+    function changeSpeed(speed) {
+        setSolveSpeed(speed);
     }
 
     async function longFunction(func) {
