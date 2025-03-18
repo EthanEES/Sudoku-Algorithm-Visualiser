@@ -13,7 +13,7 @@ export default function Page() {
     
     const [gridSolution, setgridSolution] = useState([])
     const [gridProblem, setgridProblem] = useState([])
-    const [gridAttempt, setgridAttempt] = useState([]);
+    let gridAttempt = [];
 
     const [lives, setlives] = useState(3)
 
@@ -106,7 +106,7 @@ export default function Page() {
                     }
                     
 
-                    await sleep(50); // Delay of 100ms
+                    await sleep(0); // Delay of 100ms
             }
         }
         setnumofunknownValues(unknowns.length)
@@ -114,7 +114,6 @@ export default function Page() {
         setunknownValues(unknowns)
         setgridSolution(board)
         setgridProblem(grid)
-        setgridAttempt(grid);
 
         removeGridValues(unknowns, gridInputs)
     }
@@ -196,7 +195,7 @@ export default function Page() {
             }
         }
 
-        setgridAttempt(attempt)
+        gridAttempt = attempt
     }
 
     function assignDomain(value, index, array) {
@@ -236,7 +235,6 @@ export default function Page() {
     
     async function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
         getgridAttempt(); 
-        console.log(gridAttempt)
         setunknownPossibilities([])
         
         unknownValues.forEach(assignDomain);
@@ -253,9 +251,7 @@ export default function Page() {
     
             for (let num of possibleNumbers) {
                 if (!checkforDupes(gridAttempt, row, col, num)) {
-                    let newGridAttempt = gridAttempt;
-                    newGridAttempt[row][col] = num;
-                    setgridAttempt(newGridAttempt);
+                    gridAttempt[row][col] = num;
 
                     await placeValue(num, row, col);
                     await sleep(solveSpeed);
@@ -263,8 +259,7 @@ export default function Page() {
                     if (await solve(index + 1)) {
                         return true;
                     }
-                    newGridAttempt[row][col] = 0;
-                    setgridAttempt(newGridAttempt);
+                    gridAttempt[row][col] = 0; // 
                     
                     await placeValue(0, row, col);
                     await sleep(solveSpeed);
@@ -323,61 +318,27 @@ export default function Page() {
                     parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
             );
 
-            if (lives > 1){
-                if (gridAttempt[row][col] != board[row][col] && Number.isInteger(gridAttempt[row][col])){
+            if (gridAttempt[row][col] != board[row][col] && Number.isInteger(gridAttempt[row][col])){
 
-                    cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    setlives(prevlives => prevlives - 1);
-                }
+                cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            }
 
-                else if(gridAttempt[row][col] == board[row][col] && Number.isInteger(gridAttempt[row][col])){
-                    cell.className = "text-xl bg-green-900 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    correct += 1;
-
-                }
-    
-                else{
-                    cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-
-      
-                }
+            else if(gridAttempt[row][col] == board[row][col] && Number.isInteger(gridAttempt[row][col])){
+                cell.className = "text-xl bg-green-900 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                correct += 1;
 
             }
 
             else{
-                //End Screen
-                for (let i = 0; i < gridSize; i++) {
-                    let row = (i) % gridSize;
-                    for (let j = 0; j < gridSize; j++) {
-                        let col = (j) % gridSize;
-                        
-        
-                            const cell = Array.from(gridInputs).find(
-                                input =>
-                                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-                            );
-                            
+                cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
 
-                            let prob = Math.floor(Math.random() * 100)
-                            if (prob < 50){
-                                cell.value = 0
-                            }
-                            else{
-                                cell.value = 1
-                            }
-                            
-                            cell.className = "text-xl bg-red-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            
-        
-                            await sleep(50); // Delay of 100ms
-                    }
-
-                }
-                clearGrid()
-                break
+    
             }
 
+                
         }
+
+        
 
         if (correct >= numofunknownValues){
             for (let i = 0; i < gridSize; i++) {
@@ -403,7 +364,7 @@ export default function Page() {
                         cell.className = "text-xl bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         
     
-                        await sleep(50); // Delay of 100ms
+                        await sleep(100); // Delay of 100ms
                 }
 
             }
