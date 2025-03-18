@@ -239,9 +239,42 @@ export default function Page() {
         
         unknownValues.forEach(assignDomain);
         unknownPossibilities.forEach(constraintProp);
-
-
         console.log(unknownPossibilities); // Log the assigned possibilities
+
+        async function solve(index) {
+            if (index >= unknownPossibilities.length) { // Check if the recursion has passed the last unknown value.
+                return true;
+            }
+    
+            let [row, col] = unknownPossibilities[index][0];
+            let possibleNumbers = unknownPossibilities[index][1];
+    
+            for (let num of possibleNumbers) {
+                if (!checkforDupes(gridAttempt, row, col, num)) {
+                    gridAttempt[row][col] = num;
+
+                    await placeValue(num, row, col);
+                    await sleep(solveSpeed);
+    
+                    if (await solve(index + 1)) {
+                        return true;
+                    }
+                    gridAttempt[row][col] = 0; // 
+                    
+                    await placeValue(0, row, col);
+                    await sleep(solveSpeed);
+                }
+            }
+            return false;
+        }
+
+        if (await solve(0)) {
+            console.log("Sudoku solved");
+        } else {
+            console.log("No solution exists.");
+        }
+
+
     }
     
     async function placeValue(num, row, col) { // Places the passed values into the displayed grid
