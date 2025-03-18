@@ -13,7 +13,7 @@ export default function Page() {
     
     const [gridSolution, setgridSolution] = useState([])
     const [gridProblem, setgridProblem] = useState([])
-    let gridAttempt = [];
+    const [gridAttempt, setgridAttempt] = useState([]);
 
     const [lives, setlives] = useState(3)
 
@@ -114,6 +114,7 @@ export default function Page() {
         setunknownValues(unknowns)
         setgridSolution(board)
         setgridProblem(grid)
+        setgridAttempt(grid);
 
         removeGridValues(unknowns, gridInputs)
     }
@@ -195,7 +196,7 @@ export default function Page() {
             }
         }
 
-        gridAttempt = attempt
+        setgridAttempt(attempt)
     }
 
     function assignDomain(value, index, array) {
@@ -235,6 +236,7 @@ export default function Page() {
     
     async function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
         getgridAttempt(); 
+        console.log(gridAttempt)
         setunknownPossibilities([])
         
         unknownValues.forEach(assignDomain);
@@ -251,7 +253,9 @@ export default function Page() {
     
             for (let num of possibleNumbers) {
                 if (!checkforDupes(gridAttempt, row, col, num)) {
-                    gridAttempt[row][col] = num;
+                    let newGridAttempt = gridAttempt;
+                    newGridAttempt[row][col] = num;
+                    setgridAttempt(newGridAttempt);
 
                     await placeValue(num, row, col);
                     await sleep(solveSpeed);
@@ -259,7 +263,8 @@ export default function Page() {
                     if (await solve(index + 1)) {
                         return true;
                     }
-                    gridAttempt[row][col] = 0; // 
+                    newGridAttempt[row][col] = 0;
+                    setgridAttempt(newGridAttempt);
                     
                     await placeValue(0, row, col);
                     await sleep(solveSpeed);
