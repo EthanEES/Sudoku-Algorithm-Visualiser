@@ -243,7 +243,6 @@ export default function Page() {
         domains1.innerText = "";
         domains2.innerText = "";
     
-        // Split originalDomains into two halves
         const half = Math.ceil(originalDomains.length / 2);
         const firstHalf = originalDomains.slice(0, half);
         const secondHalf = originalDomains.slice(half);
@@ -262,26 +261,29 @@ export default function Page() {
             domainsText2 += `(${cell[0]},${cell[1]}) = ${possibilities}\n`;
         }
     
-        // Update the elements with their respective halves
         domains1.innerText = domainsText1;
         domains2.innerText = domainsText2;
     }
 
-    function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
-        getgridAttempt(); 
-        
-        unknownValues.forEach(assignDomain)
-        originalDomains.forEach(constraintProp);
-        console.log(originalDomains); 
+    async function solveSudoku() {
+        unknownValues.forEach(assignDomain);
+        refreshDomains();
+    
+        let domainOfOne = true;
 
-        for(let i = 0; i < originalDomains.length; i++){
-            if(originalDomains[i][1].length == 1){
-                placeValue(originalDomains[i][1][0], originalDomains[i][0][0], originalDomains[i][0][1])
-                
+        while(domainOfOne){
+            domainOfOne = false; // Reset flag
+            originalDomains.forEach(constraintProp);
+            await placeDomains(); // Wait for async placement
+            originalDomains.forEach(constraintProp);
+
+            for(let num of originalDomains){
+                if(num[1].length == 1){
+                    domainOfOne = true
+                }
             }
-
         }
-
+    
     }
     
     async function placeValue(num, row, col) { // Places the passed values into the displayed grid
@@ -325,6 +327,7 @@ export default function Page() {
                 await sleep(solveSpeed)
                 cell.value = possibilities[0]
                 cell.style.backgroundColor = "orange"
+                originalDomains[i][1] = ""
             }
         }
 
@@ -451,7 +454,7 @@ export default function Page() {
                         <button onClick={() => {unknownValues.forEach(assignDomain); refreshDomains()}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">1. Assign Domain</button>
                         <button onClick={() => {originalDomains.forEach(constraintProp); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">2. ConstraintProp</button>
                         <button onClick={() => {placeDomains(); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">3. Place Values</button>
-                        <button onClick={() => {originalDomains.forEach(constraintProp); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">4. Backtrack</button>
+                        <button onClick={() => {solveSudoku();}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">4. Backtrack</button>
 
 
                     </div>
