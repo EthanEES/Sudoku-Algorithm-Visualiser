@@ -17,10 +17,13 @@ export default function Page() {
 
     const [lives, setlives] = useState(3)
 
-    let solveSpeed = 0;
+    const [solveSpeed, setSolveSpeed] = useState(0);
 
     const [unknownValues, setunknownValues] = useState([])
     const [numofunknownValues, setnumofunknownValues] = useState(0)
+
+    const [originalDomains, setOriginalDomains] = useState([]);
+
 
 
     function sleep(time) { // Function to delay the program
@@ -28,13 +31,13 @@ export default function Page() {
         return new Promise(resolve => setTimeout(resolve, time));
     }
     
-    function changeSpeed(speed){
-        solveSpeed = speed;
+    function changeSpeed(speed) {
+        setSolveSpeed(speed);
     }
 
-    async function longFunction(func) {
+    async function longFunction(func, param) {
         setIsFunctionRunning(true); // Show overlay
-        await func(); // Wait for function fo finish
+        await func(param); // Wait for function fo finish
         setIsFunctionRunning(false); // Hide overlay
     }
     
@@ -43,9 +46,11 @@ export default function Page() {
         const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
         gridInputs.forEach(input => {
             input.value = ""; // Clears the values of cell
-            input.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+            input.style.backgroundColor = ""
         });
 
+        refreshDomains();
+        setOriginalDomains([]);
     }
 
     async function generateGrid() { // Function to generate the sudoku grid and display on the page
@@ -103,7 +108,7 @@ export default function Page() {
                     }
                     
 
-                    await sleep(50); // Delay of 100ms
+                    await sleep(0); // Delay of 100ms
             }
         }
         setnumofunknownValues(unknowns.length)
@@ -113,6 +118,7 @@ export default function Page() {
         setgridProblem(grid)
 
         removeGridValues(unknowns, gridInputs)
+
     }
 
     function removeGridValues(unknownvalues, gridInputs) { // Removes some of the sudoku values from the solved puzzle
@@ -195,8 +201,106 @@ export default function Page() {
         gridAttempt = attempt
     }
 
+    function assignDomain(value, index, array) {
+        originalDomains[index] = [value, [1, 2, 3, 4, 5, 6, 7, 8, 9]]; // Assign numbers 1-9
+    }
+    
+    function constraintProp(value, index, array) {
+        getgridAttempt(); 
 
-    async function solveSudoku() { // Backtracking algorithm to solve the sudoku puzzle
+        let [cell, possibilities] = originalDomains[index];
+        let [row, col] = cell;
+
+        let possibilitiesSet = new Set(possibilities);
+
+    
+        for (let i = 0; i < gridSize; i++) {
+            let gridValue = gridAttempt[row][i];
+            possibilitiesSet.delete(gridValue);
+        }
+    
+        for (let i = 0; i < gridSize; i++) {
+            let gridValue = gridAttempt[i][col];
+            possibilitiesSet.delete(gridValue);
+        }
+    
+        let startRow = row - (row % (subgridSize));
+        let startCol = col - (col % (subgridSize));
+    
+        for (let i = 0; i < subgridSize; i++) {
+            for (let j = 0; j < subgridSize; j++) {
+                let gridValue = gridAttempt[startRow + i][startCol + j];
+                possibilitiesSet.delete(gridValue);
+            }
+        }
+        originalDomains[index][1] = Array.from(possibilitiesSet);
+    }
+
+    function refreshDomains() {
+        const domains1 = document.getElementById("Domains1");
+        const domains2 = document.getElementById("Domains2");
+
+        domains1.innerText = "";
+        domains2.innerText = "";
+    
+        const half = Math.ceil(originalDomains.length / 2);
+        const firstHalf = originalDomains.slice(0, half);
+        const secondHalf = originalDomains.slice(half);
+    
+        let domainsText1 = "";
+        for (let i = 0; i < firstHalf.length; i++) {
+            let cell = firstHalf[i][0];
+            let possibilities = firstHalf[i][1];
+            domainsText1 += `(${cell[0]},${cell[1]}) = ${possibilities}\n`;
+        }
+
+        let domainsText2 = "";
+        for (let i = 0; i < secondHalf.length; i++) {
+            let cell = secondHalf[i][0];
+            let possibilities = secondHalf[i][1];
+            domainsText2 += `(${cell[0]},${cell[1]}) = ${possibilities}\n`;
+        }
+    
+        domains1.innerText = domainsText1;
+        domains2.innerText = domainsText2;
+    }
+
+    async function solveSudoku() {
+        unknownValues.forEach(assignDomain);
+        refreshDomains();
+    
+        let domainOfOne = true;
+
+        while(domainOfOne){
+            domainOfOne = false; // Reset flag
+            originalDomains.forEach(constraintProp);
+            await placeDomains(); // Wait for async placement
+            originalDomains.forEach(constraintProp);
+
+            for(let num of originalDomains){
+                if(num[1].length == 1){
+                    domainOfOne = true
+                }
+            }
+        }
+
+        let newUnknowns = [];
+        
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if(!Number.isInteger(gridAttempt[row][col])){
+                    newUnknowns.push([row, col]);
+                }
+            }
+        }
+
+        longFunction(checkGrid, gridSolution);
+        setunknownValues(newUnknowns);
+        setnumofunknownValues(newUnknowns.length); 
+    
+    }
+
+    async function backtrack() { // Backtracking algorithm to solve the sudoku puzzle
         getgridAttempt();
         
         async function solve(index) {
@@ -257,10 +361,33 @@ export default function Page() {
         await sleep(solveSpeed);
         cell.style.backgroundColor = "";
     }
+
+    async function placeDomains(){
+        for (let i = 0; i < originalDomains.length; i++) {
+            const gridInputs = document.querySelectorAll("#boxcontent");
+
+            let [current, possibilities] = originalDomains[i];
+            let [row, col] = current;
+        
+            const cell = Array.from(gridInputs).find(
+                input =>
+                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
+            );
+            
+            if(possibilities.length === 1){
+                await sleep(solveSpeed)
+                cell.value = possibilities[0]
+                cell.style.backgroundColor = "orange"
+                originalDomains[i][1] = ""
+            }
+        }
+
+        refreshDomains(); 
+
+    }
     
     async function checkGrid(board){ // Checks if the attempt matches the solution and displays if its wrong
         const gridInputs = document.querySelectorAll("#boxcontent");
-        const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
         let correct = 0;
 
         getgridAttempt()
@@ -274,61 +401,27 @@ export default function Page() {
                     parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
             );
 
-            if (lives > 1){
-                if (gridAttempt[row][col] != board[row][col] && Number.isInteger(gridAttempt[row][col])){
+            if (gridAttempt[row][col] != board[row][col] && Number.isInteger(gridAttempt[row][col])){
 
-                    cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    setlives(prevlives => prevlives - 1);
-                }
+                cell.style.backgroundColor = "red"
+            }
 
-                else if(gridAttempt[row][col] == board[row][col] && Number.isInteger(gridAttempt[row][col])){
-                    cell.className = "text-xl bg-green-900 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    correct += 1;
-
-                }
-    
-                else{
-                    cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-
-      
-                }
+            else if(gridAttempt[row][col] == board[row][col] && Number.isInteger(gridAttempt[row][col])){
+                cell.style.backgroundColor = "green"
+                correct += 1;
 
             }
 
             else{
-                //End Screen
-                for (let i = 0; i < gridSize; i++) {
-                    let row = (i) % gridSize;
-                    for (let j = 0; j < gridSize; j++) {
-                        let col = (j) % gridSize;
-                        
-        
-                            const cell = Array.from(gridInputs).find(
-                                input =>
-                                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-                            );
-                            
+                cell.style.backgroundColor = ""
 
-                            let prob = Math.floor(Math.random() * 100)
-                            if (prob < 50){
-                                cell.value = 0
-                            }
-                            else{
-                                cell.value = 1
-                            }
-                            
-                            cell.className = "text-xl bg-red-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            
-        
-                            await sleep(50); // Delay of 100ms
-                    }
-
-                }
-                clearGrid()
-                break
+    
             }
 
+                
         }
+
+        
 
         if (correct >= numofunknownValues){
             for (let i = 0; i < gridSize; i++) {
@@ -351,10 +444,10 @@ export default function Page() {
                             cell.value = 1
                         }
                         
-                        cell.className = "text-xl bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        cell.style.backgroundColor = "green"
                         
     
-                        await sleep(50); // Delay of 100ms
+                        await sleep(100); // Delay of 100ms
                 }
 
             }
@@ -377,45 +470,68 @@ export default function Page() {
 
             
             <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
-            <div className="grid grid-cols-2 w-screen max-w-[1920px] justify-center items-center h-screen py-28">
-                <div className="pr-16">
-                    <div className="pb-10 place-items-center">
-                        <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Backtracking (BT)</p></h1>
-                        <ul className="list-disc p-2.5 pl-8 w-4/5 h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">
-                            <li className="pb-1">Sudoku Backtracking is a recursive algorithm which goes through each cells in a 9x9 grid assigning numbers from 1 to 9 recursively to each empty cell.</li>
+            <div className="grid grid-cols-3 w-screen max-w-[1920px] justify-center items-center h-screen py-28">
+                <div className="pl-16">
+                    <div className="pb-10  place-items-center">
+                        <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Constraint Propagation (BT)</p></h1>
+                        <ul className="list-disc p-2.5 pl-8 w-full h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">
+                            <li className="pb-1">Constraint Propagation refers to the reduction of domain variables and possibilities of a variable.</li>
+                            <li className="pb-1">In our case, in relation to sudoku, we can state that all cells within the grid have a "domain", the possible values that can go in each square.</li>
+                            <li className="pb-1">Constraint Propagation will look at each domain and apply the rules of sudoku to trim the domain and get rid of values that are not applicable.</li>
+                            <li className="pb-1">This way, when we backtrack we have alot less possibilities to try, meaning a much faster time Complexity.</li>
+                            
 
-                            <li className="pb-1">While assigning a number we can check if the number is legally allowed to be placed in the box by checking if it obeys the sudoku rules.</li>
 
-                            <li className="pb-1">If it does, we can move onto the next cell and assign the next number beginning at the number 1.</li>
-
-                            <li className="pb-1">If we manage to reach the last cell on the board, in this case the bottom right, and that cell has a valid assignment, we have a solution.</li>
-
-                            <li className="pb-1"> If we have tried all possible values from 1 to 9 in a cell, and no values are valid, we backtrack (go back to the previous cell) and continue where we left off (continue to assign the next number).</li>
                         </ul>
                     </div>
                     
 
                     <div className="place-items-center">
                         <h1 className="mb-4 text-3xl font-bold text-white">Complexity: <p className="underline inline underline-offset-3 decoration-[#8693AB]">Time</p></h1>
-                        <p className="p-2.5 w-4/5 h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
+                        <p className="p-2.5 w-full h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
                     
                     </div>
                 </div>
 
-                <div id="GridDiv" className="flex flex-col justify-center items-center mr-52 scale-[120%]">
+                <div id="GridDiv" className="flex flex-col justify-center items-center scale-[110%]">
                     <div className="text-xl font-bold mb-2 underline underline-offset-3 decoration-[#8693AB]">
                         Sudoku
                     </div>
                     <SudokuGrid rows={gridSize} cols={gridSize}/> 
                     {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
                     {gridSize} x {gridSize}
-                    <button onClick={() => checkGrid(gridSolution)} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">CheckGrid</button>
+                    <button onClick={() => longFunction(checkGrid, gridSolution)} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">CheckGrid</button>
+                    <div className="grid grid-cols-2 scale-90">
 
+                        <button onClick={() => {unknownValues.forEach(assignDomain); refreshDomains()}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">1. Assign Domain</button>
+                        <button onClick={() => {originalDomains.forEach(constraintProp); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">2. ConstraintProp</button>
+                        <button onClick={() => {placeDomains(); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">3. Place Values</button>
+                        <button onClick={() => {backtrack();}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">4. Backtrack</button>
+
+                    </div>
+                    
 
                 </div>
 
+                <div className="place-items-center">
+                        <h1 className="mb-4 text-3xl font-bold text-white"><p className="underline inline underline-offset-3 decoration-[#8693AB]">Current Domains:</p></h1>
+                        <div className="grid grid-cols-2 p-2.5 w-4/5 h-108 pb-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">
+                            <p id="Domains1" className="p-2.5 h-96 text-sm text-gray-50">
+                            </p>
+                            <p id="Domains2" className="p-2.5 h-96 text-sm text-gray-50 ">
+                            </p>
+
+                        </div>
+                        
+                    
+                </div>
+
+                
+                
                 
             </div>
+
+            
 
             
             
