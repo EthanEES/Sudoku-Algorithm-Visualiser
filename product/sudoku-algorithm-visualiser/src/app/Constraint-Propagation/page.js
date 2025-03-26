@@ -420,28 +420,30 @@ export default function Page() {
 
             
             <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
-            <div className="grid grid-cols-3 w-screen max-w-[1920px] justify-center items-center h-screen py-28 scale-90">
-                <div className="">
-                    <div className="pb-10 place-items-center">
+            <div className="grid grid-cols-3 w-screen max-w-[1920px] justify-center items-center h-screen py-28">
+                <div className="pl-16">
+                    <div className="pb-10  place-items-center">
                         <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Constraint Propagation (BT)</p></h1>
-                        <p className="p-2.5 w-4/5 h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                            Praesent sed venenatis metus, ac feugiat quam. Integer 
-                            sit amet lorem in lorem cursus aliquet vel tincidunt nisi. 
-                            Vestibulum ultrices nisl vel lectus finibus rutrum. Ut ligula 
-                            tortor, gravida nec nisi sit amet, aliquam malesuada est. 
-                            Integer tempus nec leo eu euismod. Sed ac porttitor justo. 
-                        </p>
+                        <ul className="list-disc p-2.5 pl-8 w-full h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">
+                            <li className="pb-1">Constraint Propagation refers to the reduction of domain variables and possibilities of a variable.</li>
+                            <li className="pb-1">In our case, in relation to sudoku, we can state that all cells within the grid have a "domain", the possible values that can go in each square.</li>
+                            <li className="pb-1">Constraint Propagation will look at each domain and apply the rules of sudoku to trim the domain and get rid of values that are not applicable.</li>
+                            <li className="pb-1">This way, when we backtrack we have alot less possibilities to try, meaning a much faster time Complexity.</li>
+                            
+
+
+                        </ul>
                     </div>
                     
 
                     <div className="place-items-center">
                         <h1 className="mb-4 text-3xl font-bold text-white">Complexity: <p className="underline inline underline-offset-3 decoration-[#8693AB]">Time</p></h1>
-                        <p className="p-2.5 w-4/5 h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
+                        <p className="p-2.5 w-full h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
                     
                     </div>
                 </div>
 
-                <div id="GridDiv" className="flex flex-col justify-center items-center scale-[120%]">
+                <div id="GridDiv" className="flex flex-col justify-center items-center scale-[110%]">
                     <div className="text-xl font-bold mb-2 underline underline-offset-3 decoration-[#8693AB]">
                         Sudoku
                     </div>
