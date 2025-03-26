@@ -283,7 +283,58 @@ export default function Page() {
                 }
             }
         }
+
+        let newUnknowns = [];
+        
+        for (let row = 0; row < gridSize; row++) {
+            for (let col = 0; col < gridSize; col++) {
+                if(!Number.isInteger(gridAttempt[row][col])){
+                    newUnknowns.push([row, col]);
+                }
+            }
+        }
+
+        longFunction(checkGrid, gridSolution);
+        setunknownValues(newUnknowns);
+        setnumofunknownValues(newUnknowns.length); 
     
+    }
+
+    async function backtrack() { // Backtracking algorithm to solve the sudoku puzzle
+        getgridAttempt();
+        
+        async function solve(index) {
+            if (index >= unknownValues.length) { // Check if the recursion has passed the last unknown value.
+                return true;
+            }
+    
+            let [row, col] = unknownValues[index];
+    
+            for (let num = 1; num <= gridSize; num++) {
+                console.log(gridAttempt, row, col, num);
+                if (!checkforDupes(gridAttempt, row, col, num)) {
+                    gridAttempt[row][col] = num;
+
+                    await placeValue(num, row, col);
+                    await sleep(solveSpeed);
+    
+                    if (await solve(index + 1)) {
+                        return true;
+                    }
+                    gridAttempt[row][col] = 0; // 
+                    
+                    await placeValue(0, row, col);
+                    await sleep(solveSpeed);
+                }
+            }
+            return false;
+        }
+    
+        if (await solve(0)) {
+            console.log("Sudoku solved");
+        } else {
+            console.log("No solution exists.");
+        }
     }
     
     async function placeValue(num, row, col) { // Places the passed values into the displayed grid
@@ -337,7 +388,6 @@ export default function Page() {
     
     async function checkGrid(board){ // Checks if the attempt matches the solution and displays if its wrong
         const gridInputs = document.querySelectorAll("#boxcontent");
-        const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
         let correct = 0;
 
         getgridAttempt()
@@ -456,7 +506,7 @@ export default function Page() {
                         <button onClick={() => {unknownValues.forEach(assignDomain); refreshDomains()}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">1. Assign Domain</button>
                         <button onClick={() => {originalDomains.forEach(constraintProp); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">2. ConstraintProp</button>
                         <button onClick={() => {placeDomains(); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">3. Place Values</button>
-                        <button onClick={() => {solveSudoku();}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">4. Backtrack</button>
+                        <button onClick={() => {backtrack();}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">4. Backtrack</button>
 
                     </div>
                     
