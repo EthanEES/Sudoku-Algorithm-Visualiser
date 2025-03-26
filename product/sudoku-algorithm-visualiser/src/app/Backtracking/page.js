@@ -378,22 +378,26 @@ export default function Page() {
             
             <AlgosNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} solveSudoku={solveSudoku} clearGrid={clearGrid} checkGrid={checkGrid} longFunction={longFunction} changeSpeed={changeSpeed}/>
             <div className="grid grid-cols-2 w-screen max-w-[1920px] justify-center items-center h-screen py-28">
-                <div className="pl-16">
-                    <div className="pb-10 place-items-start">
+                <div className="pr-16">
+                    <div className="pb-10 place-items-center">
                         <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Backtracking (BT)</p></h1>
-                        <p className="p-2.5 w-2/3 h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                            Praesent sed venenatis metus, ac feugiat quam. Integer 
-                            sit amet lorem in lorem cursus aliquet vel tincidunt nisi. 
-                            Vestibulum ultrices nisl vel lectus finibus rutrum. Ut ligula 
-                            tortor, gravida nec nisi sit amet, aliquam malesuada est. 
-                            Integer tempus nec leo eu euismod. Sed ac porttitor justo. 
-                        </p>
+                        <ul className="list-disc p-2.5 pl-8 w-4/5 h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">
+                            <li className="pb-1">Sudoku Backtracking is a recursive algorithm which goes through each cells in a 9x9 grid assigning numbers from 1 to 9 recursively to each empty cell.</li>
+
+                            <li className="pb-1">While assigning a number we can check if the number is legally allowed to be placed in the box by checking if it obeys the sudoku rules.</li>
+
+                            <li className="pb-1">If it does, we can move onto the next cell and assign the next number beginning at the number 1.</li>
+
+                            <li className="pb-1">If we manage to reach the last cell on the board, in this case the bottom right, and that cell has a valid assignment, we have a solution.</li>
+
+                            <li className="pb-1"> If we have tried all possible values from 1 to 9 in a cell, and no values are valid, we backtrack (go back to the previous cell) and continue where we left off (continue to assign the next number).</li>
+                        </ul>
                     </div>
                     
 
-                    <div className="place-items-start">
+                    <div className="place-items-center">
                         <h1 className="mb-4 text-3xl font-bold text-white">Complexity: <p className="underline inline underline-offset-3 decoration-[#8693AB]">Time</p></h1>
-                        <p className="p-2.5 w-2/3 h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
+                        <p className="p-2.5 w-4/5 h-96 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white"></p>
                     
                     </div>
                 </div>
