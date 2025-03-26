@@ -35,9 +35,9 @@ export default function Page() {
         setSolveSpeed(speed);
     }
 
-    async function longFunction(func) {
+    async function longFunction(func, param) {
         setIsFunctionRunning(true); // Show overlay
-        await func(); // Wait for function fo finish
+        await func(param); // Wait for function fo finish
         setIsFunctionRunning(false); // Hide overlay
     }
     
@@ -448,7 +448,7 @@ export default function Page() {
                     <SudokuGrid rows={gridSize} cols={gridSize}/> 
                     {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
                     {gridSize} x {gridSize}
-                    <button onClick={() => checkGrid(gridSolution)} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">CheckGrid</button>
+                    <button onClick={() => longFunction(checkGrid, gridSolution)} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">CheckGrid</button>
                     <div className="grid grid-cols-2 scale-90">
 
                         <button onClick={() => {unknownValues.forEach(assignDomain); refreshDomains()}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">1. Assign Domain</button>
