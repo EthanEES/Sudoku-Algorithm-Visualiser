@@ -423,7 +423,7 @@ export default function Page() {
             <div className="grid grid-cols-3 w-screen max-w-[1920px] justify-center items-center h-screen py-28 scale-90">
                 <div className="">
                     <div className="pb-10 place-items-center">
-                        <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Forward Checking (BT)</p></h1>
+                        <h1 className="mb-4 text-3xl font-bold text-white">Algorithm: <p className="inline underline underline-offset-3 decoration-[#8693AB]">Constraint Propagation (BT)</p></h1>
                         <p className="p-2.5 w-4/5 h-60 text-sm text-gray-50 bg-[#1b212c] border rounded-2xl border-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
                             Praesent sed venenatis metus, ac feugiat quam. Integer 
                             sit amet lorem in lorem cursus aliquet vel tincidunt nisi. 
@@ -456,11 +456,8 @@ export default function Page() {
                         <button onClick={() => {placeDomains(); refreshDomains() }} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">3. Place Values</button>
                         <button onClick={() => {solveSudoku();}} className="rounded p-2 mr-2 mt-2 bg-[#BDD4E7] text-[#1b212c]">4. Backtrack</button>
 
-
                     </div>
                     
-
-
 
                 </div>
 

@@ -26,7 +26,7 @@ export default function AlgosNavbar({ generateGrid, sizeGrid, solveSudoku, clear
                             </button>
                             {isAlgorithmsOpen && (
                                 <ul className="absolute mt-2 bg-white dark:bg-gray-800 border rounded">
-                                    {[["Backtracking (BT)", "Backtracking"], ["Forward Checking (BT)", "Forward-Checking"]].map(([algo, html], index) => (
+                                    {[["Backtracking (BT)", "Backtracking"], ["Constraint Propagation (BT)", "Constraint-Propagation"]].map(([algo, html], index) => (
                                         <button key={index} onClick={() => window.location.href = "/"+ html} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-nowrap">
                                             <a>{algo}</a>
                                         </button>
