@@ -28,14 +28,24 @@ Today I created the initial webpage for my project using the chosen framework, N
 
 ##  02/10/24: Day 1 - Gitlab set up and Research
 
-This is the first day I began the project by beginning this diary, spent time to look into "Markdown Documentation" and its features, and have cloned and set up my gitlab so its ready to start coding when i have enough reseach and my plan is made.
+This is the first day i began the project by beginning this diary, i have spent time to look into "Markdown Documentation" and its features. I have cloned and set up my gitlab so its ready to start coding when i have enough reseach and my plan is made.
+
   
->  Quote Markdown Example
+
+> Quote Markdown Example
+ 
 >
+  
 >  - Bullet Point Markdown Example
+  
 >
->  - **Bold Markdown Example**
->
->  - [Hyperlink Markdown Example](https://google.com)
->
+  
+>  -  **Bold Markdown Example**  
+
+> 
+
+>  -  [Hyperlink Markdown Example](https://google.com)  
+
+> 
+
 >  1. Number Markdown Example
