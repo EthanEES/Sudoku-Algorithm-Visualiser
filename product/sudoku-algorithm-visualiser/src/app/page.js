@@ -3,339 +3,339 @@ import React, { useState } from "react";
 import SudokuGrid from "../components/sudokugrid";
 import HomeNavbar from "../components/homeNavbar";
 
-
 export default function Page() {
+	const [isFunctionRunning, setIsFunctionRunning] = useState(false);
 
-    const [isFunctionRunning, setIsFunctionRunning] = useState(false);
+	const [gridSize, setGridSize] = useState(9);
+	const [subgridSize, setsubgridSize] = useState(3);
 
-    const [gridSize, setGridSize] = useState(9);
-    const [subgridSize, setsubgridSize] = useState(3)
-    
-    const [gridSolution, setgridSolution] = useState([])
-    const [gridProblem, setgridProblem] = useState([])
-    let gridAttempt = [];
+	const [gridSolution, setgridSolution] = useState([]);
+	const [gridProblem, setgridProblem] = useState([]);
+	let gridAttempt = [];
 
-    const [lives, setlives] = useState(3)
+	const [lives, setlives] = useState(3);
 
-    const [unknownValues, setunknownValues] = useState([])
-    const [numofunknownValues, setnumofunknownValues] = useState(0)
+	const [unknownValues, setunknownValues] = useState([]);
+	const [numofunknownValues, setnumofunknownValues] = useState(0);
 
+	function sleep(time) {
+		// Function to delay the program
 
-    function sleep(time) { // Function to delay the program
-        
-        return new Promise(resolve => setTimeout(resolve, time));
-    }
+		return new Promise((resolve) => setTimeout(resolve, time));
+	}
 
-    async function longFunction(func) {
-        setIsFunctionRunning(true); // Show overlay
-        await func(); // Wait for function fo finish
-        setIsFunctionRunning(false); // Hide overlay
-    }
-    
-    function clearGrid() { // Function to clear the grid displayed on the webpage
-        setlives(3);
-        const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
-        gridInputs.forEach(input => {
-            input.value = ""; // Clears the values of cell
-            input.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
-        });
+	async function longFunction(func) {
+		setIsFunctionRunning(true); // Show overlay
+		await func(); // Wait for function fo finish
+		setIsFunctionRunning(false); // Hide overlay
+	}
 
-    }
+	function clearGrid() {
+		// Function to clear the grid displayed on the webpage
+		setlives(3);
+		const gridInputs = document.querySelectorAll("#boxcontent"); // Selects all input elements by their ID
+		gridInputs.forEach((input) => {
+			input.value = ""; // Clears the values of cell
+			input.className =
+				"text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+		});
+	}
 
-    async function generateGrid() { // Function to generate the sudoku grid and display on the page
-        clearGrid(); // Assuming this function resets the grid
-        const gridInputs = document.querySelectorAll("#boxcontent");
+	async function generateGrid() {
+		// Function to generate the sudoku grid and display on the page
+		clearGrid(); // Assuming this function resets the grid
+		const gridInputs = document.querySelectorAll("#boxcontent");
 
-        const board = Array.from({ length: gridSize }, () => Array(gridSize).fill(0));
-    
-        const maxAttempts = 1000; // Prevent infinite loops
-    
-        for (let row = 0; row < gridSize; row++) {
-            for (let col = 0; col < gridSize; col++) {
-                let temp_value = Math.floor(Math.random() * gridSize) + 1;
-                let attempts = 0;
-                
+		const board = Array.from({ length: gridSize }, () =>
+			Array(gridSize).fill(0)
+		);
 
-                while (checkforDupes(board, row, col, temp_value)){
-                    temp_value = Math.floor(Math.random() * gridSize) + 1;
-                    attempts++;
-                    
-                    if (attempts > maxAttempts) {
-                        return generateGrid(); // Restart the process
-                    }
-                }
+		const maxAttempts = 1000; // Prevent infinite loops
 
-                board[row][col] = temp_value;
-            }
-        }
+		for (let row = 0; row < gridSize; row++) {
+			for (let col = 0; col < gridSize; col++) {
+				let temp_value = Math.floor(Math.random() * gridSize) + 1;
+				let attempts = 0;
 
-        let grid = JSON.parse(JSON.stringify(board));
-        let unknowns = [];
-        
-        for (let i = 0; i < gridSize; i++) {
-            let row = (i) % gridSize;
-            for (let j = 0; j < gridSize; j++) {
-                let col = (j) % gridSize;
-                
+				while (checkforDupes(board, row, col, temp_value)) {
+					temp_value = Math.floor(Math.random() * gridSize) + 1;
+					attempts++;
 
-                    const cell = Array.from(gridInputs).find(
-                        input =>
-                            parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-                    );
+					if (attempts > maxAttempts) {
+						return generateGrid(); // Restart the process
+					}
+				}
 
-                    let prob = Math.floor(Math.random() * 100)
-                    if (prob < 50){
-                        cell.value = board[row][col]
-                        cell.readOnly = true;
+				board[row][col] = temp_value;
+			}
+		}
 
-                    }
-                    else{
-                        grid[row][col] = 0
-                        cell.value = 0
-                        cell.className = "blur text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        unknowns.push([row, col])
-                    }
-                    
+		let grid = JSON.parse(JSON.stringify(board));
+		let unknowns = [];
 
-                    await sleep(50); // Delay of 100ms
-            }
-        }
-        setnumofunknownValues(unknowns.length)
+		for (let i = 0; i < gridSize; i++) {
+			let row = i % gridSize;
+			for (let j = 0; j < gridSize; j++) {
+				let col = j % gridSize;
 
-        setunknownValues(unknowns)
-        setgridSolution(board)
-        setgridProblem(grid)
+				const cell = Array.from(gridInputs).find(
+					(input) =>
+						parseInt(input.getAttribute("data-row")) == row &&
+						parseInt(input.getAttribute("data-col")) == col
+				);
 
-        removeGridValues(unknowns, gridInputs)
-    }
+				let prob = Math.floor(Math.random() * 100);
+				if (prob < 50) {
+					cell.value = board[row][col];
+					cell.readOnly = true;
+				} else {
+					grid[row][col] = 0;
+					cell.value = 0;
+					cell.className =
+						"blur text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+					unknowns.push([row, col]);
+				}
 
-    function removeGridValues(unknownvalues, gridInputs) { // Removes some of the sudoku values from the solved puzzle
-        for (let i = 0; i < unknownvalues.length; i++) {
-            let row = unknownvalues[i][0];
-            let col = unknownvalues[i][1];
+				await sleep(50); // Delay of 100ms
+			}
+		}
+		setnumofunknownValues(unknowns.length);
 
-            const cell = Array.from(gridInputs).find(
-                input =>
-                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-            );
-            
-            cell.value = ""
-            cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-            cell.readOnly = false;
+		setunknownValues(unknowns);
+		setgridSolution(board);
+		setgridProblem(grid);
 
-        }
-    }
-    
-    function checkforDupes(board, row, col, value) { // Various sudoku conditions that are checked returning true if duplicates are found
-    
-        for (let i = 0; i < gridSize; i++) {
-            if (board[row][i] === value) {
-                return true;
-            }
-        }
-    
-        for (let i = 0; i < gridSize; i++) {
-            if (board[i][col] === value) {
-                return true;
-            }
-        }
-        
-        const startRow = row - (row % (subgridSize)),
-          startCol = col - (col % (subgridSize));
+		removeGridValues(unknowns, gridInputs);
+	}
 
-        for (let i = 0; i < subgridSize; i++)
-            for (let j = 0; j < subgridSize; j++)
-                if (board[i + startRow][j + startCol] === value)
-                    return true;
-    
-        return false; // No duplicates found
-    }
-    
-    function sizeGrid() { // Change the gridsize altering the global variables
-        clearGrid()
+	function removeGridValues(unknownvalues, gridInputs) {
+		// Removes some of the sudoku values from the solved puzzle
+		for (let i = 0; i < unknownvalues.length; i++) {
+			let row = unknownvalues[i][0];
+			let col = unknownvalues[i][1];
 
-        switch(subgridSize){
-            case 3:
-                setsubgridSize(4)
-                setGridSize(16)
-                break;
+			const cell = Array.from(gridInputs).find(
+				(input) =>
+					parseInt(input.getAttribute("data-row")) == row &&
+					parseInt(input.getAttribute("data-col")) == col
+			);
 
-            case 4:
-                setsubgridSize(3)
-                setGridSize(9)
-                break;
+			cell.value = "";
+			cell.className =
+				"text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+			cell.readOnly = false;
+		}
+	}
 
-        }        
-    }
+	function checkforDupes(board, row, col, value) {
+		// Various sudoku conditions that are checked returning true if duplicates are found
 
-    function getgridAttempt(){ // Traverses and saves the displayed grid with both the user inputs + generated grid
-        const gridInputs = document.querySelectorAll("#boxcontent");
-        const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
+		for (let i = 0; i < gridSize; i++) {
+			if (board[row][i] === value) {
+				return true;
+			}
+		}
 
-        for (let i = 0; i < gridSize; i++) {
-            let row = (i) % gridSize;
-            for (let j = 0; j < gridSize; j++) {
-                let col = (j) % gridSize;
-                
-                    const cell = Array.from(gridInputs).find(
-                        input =>
-                            parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-                    );
+		for (let i = 0; i < gridSize; i++) {
+			if (board[i][col] === value) {
+				return true;
+			}
+		}
 
-                    attempt[row][col] = parseInt(cell.value)   
-            }
-        }
+		const startRow = row - (row % subgridSize),
+			startCol = col - (col % subgridSize);
 
-        gridAttempt = attempt
-    }
+		for (let i = 0; i < subgridSize; i++)
+			for (let j = 0; j < subgridSize; j++)
+				if (board[i + startRow][j + startCol] === value) return true;
 
-    
-    async function checkGrid(board){ // Checks if the attempt matches the solution and displays if its wrong
-        const gridInputs = document.querySelectorAll("#boxcontent");
-        const attempt = Array.from({ length: gridSize }, () => Array(gridSize).fill(0))
-        let correct = 0;
+		return false; // No duplicates found
+	}
 
-        getgridAttempt()
+	function sizeGrid() {
+		// Change the gridsize altering the global variables
+		clearGrid();
 
-        for (let i = 0; i < unknownValues.length; i++) {
-            let row = unknownValues[i][0];
-            let col = unknownValues[i][1];
+		switch (subgridSize) {
+			case 3:
+				setsubgridSize(4);
+				setGridSize(16);
+				break;
 
-            const cell = Array.from(gridInputs).find(
-                input =>
-                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-            );
+			case 4:
+				setsubgridSize(3);
+				setGridSize(9);
+				break;
+		}
+	}
 
-            if (lives > 1){
-                if (gridAttempt[row][col] != board[row][col] && Number.isInteger(gridAttempt[row][col])){
+	function getgridAttempt() {
+		// Traverses and saves the displayed grid with both the user inputs + generated grid
+		const gridInputs = document.querySelectorAll("#boxcontent");
+		const attempt = Array.from({ length: gridSize }, () =>
+			Array(gridSize).fill(0)
+		);
 
-                    cell.className = "bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    setlives(prevlives => prevlives - 1);
-                }
+		for (let i = 0; i < gridSize; i++) {
+			let row = i % gridSize;
+			for (let j = 0; j < gridSize; j++) {
+				let col = j % gridSize;
 
-                else if(gridAttempt[row][col] == board[row][col] && Number.isInteger(gridAttempt[row][col])){
-                    cell.className = "text-xl bg-green-900 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                    correct += 1;
+				const cell = Array.from(gridInputs).find(
+					(input) =>
+						parseInt(input.getAttribute("data-row")) == row &&
+						parseInt(input.getAttribute("data-col")) == col
+				);
 
-                }
-    
-                else{
-                    cell.className = "text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+				attempt[row][col] = parseInt(cell.value);
+			}
+		}
 
-      
-                }
+		gridAttempt = attempt;
+	}
 
-            }
+	async function checkGrid(board) {
+		// Checks if the attempt matches the solution and displays if its wrong
+		const gridInputs = document.querySelectorAll("#boxcontent");
+		const attempt = Array.from({ length: gridSize }, () =>
+			Array(gridSize).fill(0)
+		);
+		let correct = 0;
 
-            else{
-                //End Screen
-                for (let i = 0; i < gridSize; i++) {
-                    let row = (i) % gridSize;
-                    for (let j = 0; j < gridSize; j++) {
-                        let col = (j) % gridSize;
-                        
-        
-                            const cell = Array.from(gridInputs).find(
-                                input =>
-                                    parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-                            );
-                            
+		getgridAttempt();
 
-                            let prob = Math.floor(Math.random() * 100)
-                            if (prob < 50){
-                                cell.value = 0
-                            }
-                            else{
-                                cell.value = 1
-                            }
-                            
-                            cell.className = "text-xl bg-red-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                            
-        
-                            await sleep(50); // Delay of 100ms
-                    }
+		for (let i = 0; i < unknownValues.length; i++) {
+			let row = unknownValues[i][0];
+			let col = unknownValues[i][1];
 
-                }
-                clearGrid()
-                break
-            }
+			const cell = Array.from(gridInputs).find(
+				(input) =>
+					parseInt(input.getAttribute("data-row")) == row &&
+					parseInt(input.getAttribute("data-col")) == col
+			);
 
-        }
+			if (lives > 1) {
+				if (
+					gridAttempt[row][col] != board[row][col] &&
+					Number.isInteger(gridAttempt[row][col])
+				) {
+					cell.className =
+						"bg-red-600 text-xl h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+					setlives((prevlives) => prevlives - 1);
+				} else if (
+					gridAttempt[row][col] == board[row][col] &&
+					Number.isInteger(gridAttempt[row][col])
+				) {
+					cell.className =
+						"text-xl bg-green-900 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+					correct += 1;
+				} else {
+					cell.className =
+						"text-xl dark:bg-[#1b212c] h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+				}
+			} else {
+				//End Screen
+				for (let i = 0; i < gridSize; i++) {
+					let row = i % gridSize;
+					for (let j = 0; j < gridSize; j++) {
+						let col = j % gridSize;
 
-        if (correct >= numofunknownValues){
-            for (let i = 0; i < gridSize; i++) {
-                let row = (i) % gridSize;
-                for (let j = 0; j < gridSize; j++) {
-                    let col = (j) % gridSize;
-                    
-    
-                        const cell = Array.from(gridInputs).find(
-                            input =>
-                                parseInt(input.getAttribute("data-row")) == row && parseInt(input.getAttribute("data-col")) == col
-                        );
-                        
+						const cell = Array.from(gridInputs).find(
+							(input) =>
+								parseInt(input.getAttribute("data-row")) ==
+									row &&
+								parseInt(input.getAttribute("data-col")) == col
+						);
 
-                        let prob = Math.floor(Math.random() * 100)
-                        if (prob < 50){
-                            cell.value = 0
-                        }
-                        else{
-                            cell.value = 1
-                        }
-                        
-                        cell.className = "text-xl bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        
-    
-                        await sleep(50); // Delay of 100ms
-                }
+						let prob = Math.floor(Math.random() * 100);
+						if (prob < 50) {
+							cell.value = 0;
+						} else {
+							cell.value = 1;
+						}
 
-            }
-            clearGrid()
-        
-        }
+						cell.className =
+							"text-xl bg-red-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
-    }
+						await sleep(50); // Delay of 100ms
+					}
+				}
+				clearGrid();
+				break;
+			}
+		}
 
+		if (correct >= numofunknownValues) {
+			for (let i = 0; i < gridSize; i++) {
+				let row = i % gridSize;
+				for (let j = 0; j < gridSize; j++) {
+					let col = j % gridSize;
 
-    return (
-        <div className="flex font-spacegrotesk">
-            <link rel="preconnect" href="https://fonts.googleapis.com"></link>
-            <link rel="preconnect" href="https://fonts.gstatic.com" ></link>
-            <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
+					const cell = Array.from(gridInputs).find(
+						(input) =>
+							parseInt(input.getAttribute("data-row")) == row &&
+							parseInt(input.getAttribute("data-col")) == col
+					);
 
-            {isFunctionRunning && (
-                <div className="absolute w-full h-full opacity-0 z-50 pointer-events-auto" />
-            )}
+					let prob = Math.floor(Math.random() * 100);
+					if (prob < 50) {
+						cell.value = 0;
+					} else {
+						cell.value = 1;
+					}
 
+					cell.className =
+						"text-xl bg-green-600 h-[80%] w-[80%] place-items-center [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
-            <HomeNavbar generateGrid={generateGrid} sizeGrid={sizeGrid} clearGrid={clearGrid} checkGrid={checkGrid} gridSolution={gridSolution} longFunction={longFunction}/>
+					await sleep(50); // Delay of 100ms
+				}
+			}
+			clearGrid();
+		}
+	}
 
-            
+	return (
+		<div className="flex font-spacegrotesk">
+			<link rel="preconnect" href="https://fonts.googleapis.com"></link>
+			<link rel="preconnect" href="https://fonts.gstatic.com"></link>
+			<link
+				href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&family=Tourney:ital,wght@0,100..900;1,100..900&display=swap"
+				rel="stylesheet"
+			></link>
 
-            <div className="grid grid-cols-3 w-screen h-screen items-center pb-20">
-                <div className="pl-16 text-center">
-                </div>
+			{isFunctionRunning && (
+				<div className="absolute w-full h-full opacity-0 z-50 pointer-events-auto" />
+			)}
 
-                <div id="GridDiv" className="flex flex-col justify-center items-center">
-                    <div className="text-xl font-bold mb-2 underline underline-offset-3 decoration-[#8693AB]">
-                        Sudoku
-                    </div>
-                    <SudokuGrid rows={gridSize} cols={gridSize}/> 
-                    {/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
-                    {gridSize} x {gridSize}
-                    <a className="inline border-2 rounded p-2 mt-5 mr-2">Lives Remaining = {lives}</a>
+			<HomeNavbar
+				generateGrid={generateGrid}
+				sizeGrid={sizeGrid}
+				clearGrid={clearGrid}
+				checkGrid={checkGrid}
+				gridSolution={gridSolution}
+				longFunction={longFunction}
+			/>
 
-                </div>
+			<div className="grid grid-cols-3 w-screen h-screen items-center pb-20">
+				<div className="pl-16 text-center"></div>
 
-                <div className="pr-16">
-                </div>
-            </div>
+				<div
+					id="GridDiv"
+					className="flex flex-col justify-center items-center"
+				>
+					<div className="text-xl font-bold mb-2 underline underline-offset-3 decoration-[#8693AB]">
+						Sudoku
+					</div>
+					<SudokuGrid rows={gridSize} cols={gridSize} />
+					{/* <div className="font-5xl mb-2">Timer: 00:00</div>*/}
+					{gridSize} x {gridSize}
+					<a className="inline border-2 rounded p-2 mt-5 mr-2">
+						Lives Remaining = {lives}
+					</a>
+				</div>
 
-            
-
-            
-            
-        </div>
-            
-    );
-  }
+				<div className="pr-16"></div>
+			</div>
+		</div>
+	);
+}
