@@ -6,7 +6,7 @@ export default function QueensNavbar({ generateQueens, clearGrid}) {
     const [isSpeedOpen, setIsSpeedOpen] = useState(false);
 
     return (
-        <nav className="flex items-center w-full bg-white dark:bg-[#1b212c] justify-between py-3 px-5 rounded-b-2xl ">
+        <nav className="flex items-center w-full bg-white bg-[#1b212c] justify-between py-3 px-5 rounded-b-2xl ">
                 <a className="break-words">
                     <div className="flex items-center justify-between">
                         <button onClick={() => window.location.href = "/"} className="max-w-16 rounded py-2 mr-2 hover:bg-[#313c50]">
@@ -23,9 +23,9 @@ export default function QueensNavbar({ generateQueens, clearGrid}) {
                                 Speed: Fast ▼
                             </button>
                             {isSpeedOpen && (
-                                <ul className="absolute mt-2 dark:bg-gray-800 border rounded">
+                                <ul className="absolute mt-2 bg-gray-800 border rounded">
                                     {["Slow", "Medium", "Fast", "Fastest"].map((speed, index) => (
-                                        <button key={index} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
+                                        <button key={index} className="w-full px-4 py-2 hover:bg-gray-200 hover:bg-gray-700">
                                             <a>{speed}</a>
                                         </button>
                                     ))}
@@ -39,12 +39,12 @@ export default function QueensNavbar({ generateQueens, clearGrid}) {
                                 Other ▼
                             </button>
                             {isOtherOpen && (
-                                <ul className="absolute mt-2  bg-white dark:bg-gray-800 border rounded">
-                                    <button onClick={() => window.location.href = "/"} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
+                                <ul className="absolute mt-2  bg-white bg-gray-800 border rounded">
+                                    <button onClick={() => window.location.href = "/"} className="w-full px-4 py-2 hover:bg-gray-200 hover:bg-gray-700">
                                             <a>Sudoku</a>
                                     </button>
                                     {[].map((other, index) => (
-                                        <button key={index} onClick={() => window.location.href = "/"+ other} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
+                                        <button key={index} onClick={() => window.location.href = "/"+ other} className="w-full px-4 py-2 hover:bg-gray-200 hover:bg-gray-700">
                                             <a>{other}</a>
                                         </button>
                                     ))}

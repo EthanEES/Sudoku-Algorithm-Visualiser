@@ -25,9 +25,9 @@ export default function HomeNavbar({ generateGrid, sizeGrid, checkGrid, gridSolu
                                 Algorithms ▼
                             </button>
                             {isAlgorithmsOpen && (
-                                <ul className="absolute mt-2 bg-white dark:bg-gray-800 border rounded">
+                                <ul className="absolute mt-2 bg-white bg-gray-800 border rounded">
                                     {[["Backtracking (BT)", "Backtracking"], ["Constraint-Propagation (BT)", "Constraint-Propagation"]].map(([algo, html], index) => (
-                                        <button key={index} onClick={() => window.location.href = "/"+ html} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-nowrap">
+                                        <button key={index} onClick={() => window.location.href = "/"+ html} className="w-full px-4 py-2 hover:bg-gray-200 hover:bg-gray-700 text-nowrap">
                                             <a>{algo}</a>
                                         </button>
                                     ))}
@@ -45,9 +45,9 @@ export default function HomeNavbar({ generateGrid, sizeGrid, checkGrid, gridSolu
                                 Other ▼
                             </button>
                             {isOtherOpen && (
-                                <ul className="absolute mt-2  bg-white dark:bg-gray-800 border rounded">
+                                <ul className="absolute mt-2  bg-white bg-gray-800 border rounded">
                                     {["8Queens"].map((other, index) => (
-                                        <button key={index} onClick={() => window.location.href = "/"+ other} className="w-full px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
+                                        <button key={index} onClick={() => window.location.href = "/"+ other} className="w-full px-4 py-2 hover:bg-gray-200 hover:bg-gray-700">
                                             <a>{other}</a>
                                         </button>
                                     ))}
